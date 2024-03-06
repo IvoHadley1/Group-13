@@ -15,6 +15,8 @@ public class Group13Game extends ApplicationAdapter {
 		img = new Texture("badlogic.jpg");
 		int x = 1;
 		//Test change!
+		int y = 2;
+		//Test change 2!
 	}
 
 	@Override
