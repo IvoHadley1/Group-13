@@ -13,8 +13,8 @@ public class Group13Game extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-		int x = 1;
-		//Test change!
+		int y = 1;
+		//Test change2!
 	}
 
 	@Override
