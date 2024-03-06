@@ -14,7 +14,9 @@ public class Group13Game extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
 		int x = 1;
-		//Test change2!
+		//Test change!
+		int y = 2;
+		//Test change 2!
 	}
 
 	@Override
