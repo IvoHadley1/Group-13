@@ -1,4 +1,4 @@
-package com.group13.game;
+package com.group13.game.InteractablesLib;
 
 import com.badlogic.gdx.math.Vector2;
 
