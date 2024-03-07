@@ -10,6 +10,13 @@ public class Player {
     private int studyScore;
     private int motivationScore;
     private int sleepScore;
+    private float velocityX;
+    private float velocityY;
+    private float accelerationX;
+    private float accelerationY;
+    private float maxSpeed;
+    private float acceleration;
+    private float deceleration;
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
@@ -18,6 +25,15 @@ public class Player {
         this.studyScore = 0;
         this.motivationScore = 0;
         this.sleepScore = 0;
+
+        // Semi realistic movement system
+        this.velocityX = 0;
+        this.velocityY = 0;
+        this.accelerationX = 0;
+        this.accelerationY = 0;
+        this.maxSpeed = 5;
+        this.acceleration = 0.5f;
+        this.deceleration = 0.3f;
     }
 
     // Getters and Setters
@@ -68,5 +84,40 @@ public class Player {
         shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
         shapeRenderer.circle(position.x, position.y, 15);
         shapeRenderer.end();
+    }
+
+    public void update(float delta) {
+        // Apply acceleration to velocity
+        velocityX += accelerationX * delta;
+        velocityY += accelerationY * delta;
+
+        // Limit velocity to max speed
+        float speed = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+        if (speed > maxSpeed) {
+            float factor = maxSpeed / speed;
+            velocityX *= factor;
+            velocityY *= factor;
+        }
+
+        // Apply deceleration if no acceleration is applied
+        if (accelerationX == 0) {
+            velocityX *= (float) Math.pow(deceleration, delta);
+        }
+        if (accelerationY == 0) {
+            velocityY *= (float) Math.pow(deceleration, delta);
+        }
+
+        // Update position based on velocity
+        position.x += velocityX * delta;
+        position.y += velocityY * delta;
+
+        // Reset acceleration
+        accelerationX = 0;
+        accelerationY = 0;
+    }
+
+    public void accelerate(float accelX, float accelY) {
+        accelerationX += accelX;
+        accelerationY += accelY;
     }
 }
