@@ -4,19 +4,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
+    private final float speed;
+    private Vector2 playerMovement;
     private Vector2 position;
     private float currentEnergy;
     private float currentMotivation;
     private int studyScore;
     private int motivationScore;
     private int sleepScore;
-    private float velocityX;
-    private float velocityY;
-    private float accelerationX;
-    private float accelerationY;
-    private float maxSpeed;
-    private float acceleration;
-    private float deceleration;
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
@@ -25,15 +20,8 @@ public class Player {
         this.studyScore = 0;
         this.motivationScore = 0;
         this.sleepScore = 0;
-
-        // Semi realistic movement system
-        this.velocityX = 0;
-        this.velocityY = 0;
-        this.accelerationX = 0;
-        this.accelerationY = 0;
-        this.maxSpeed = 5;
-        this.acceleration = 0.5f;
-        this.deceleration = 0.3f;
+        this.playerMovement = new Vector2(0, 0);
+        this.speed = 250f;
     }
 
     // Getters and Setters
@@ -87,37 +75,18 @@ public class Player {
     }
 
     public void update(float delta) {
-        // Apply acceleration to velocity
-        velocityX += accelerationX * delta;
-        velocityY += accelerationY * delta;
-
-        // Limit velocity to max speed
-        float speed = (float) Math.sqrt(velocityX * velocityX + velocityY * velocityY);
-        if (speed > maxSpeed) {
-            float factor = maxSpeed / speed;
-            velocityX *= factor;
-            velocityY *= factor;
+        // Normalize the movement vector
+        if (playerMovement.len() > 0) {
+            playerMovement.nor();
         }
 
-        // Apply deceleration if no acceleration is applied
-        if (accelerationX == 0) {
-            velocityX *= (float) Math.pow(deceleration, delta);
-        }
-        if (accelerationY == 0) {
-            velocityY *= (float) Math.pow(deceleration, delta);
-        }
-
-        // Update position based on velocity
-        position.x += velocityX * delta;
-        position.y += velocityY * delta;
-
-        // Reset acceleration
-        accelerationX = 0;
-        accelerationY = 0;
+        // Update the player's position based on the movement vector and speed
+        position.mulAdd(playerMovement, speed * delta);
     }
 
-    public void accelerate(float accelX, float accelY) {
-        accelerationX += accelX;
-        accelerationY += accelY;
+    public void setMovementDirection(float x, float y) {
+        playerMovement.set(x, y);
     }
+
+
 }
