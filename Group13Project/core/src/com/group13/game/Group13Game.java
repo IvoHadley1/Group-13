@@ -23,6 +23,10 @@ public class Group13Game extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        HandlePlayerActions();
+    }
+
+    private void HandlePlayerActions() {
         theStudent.draw(shapeRenderer);
         theStudent.update(Gdx.graphics.getDeltaTime());
         handleInput();
