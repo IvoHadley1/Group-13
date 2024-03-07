@@ -9,4 +9,8 @@ public abstract class RecreationalSpace implements Interactable {
         position = new Vector2(x, y);
     }
 
+    public abstract void GiveMotivation();
+
+    public abstract void GiveMotivationScore();
+
 }

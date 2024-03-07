@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-    private final float speed;
-    private Vector2 playerMovement;
-    private Vector2 position;
+    private final float playerSpeed;
+    private final Vector2 playerMovement;
+    private final Vector2 position;
     private float currentEnergy;
     private float currentMotivation;
     private int studyScore;
@@ -21,7 +21,7 @@ public class Player {
         this.motivationScore = 0;
         this.sleepScore = 0;
         this.playerMovement = new Vector2(0, 0);
-        this.speed = 250f;
+        this.playerSpeed = 250f;
     }
 
     // Getters and Setters
@@ -81,7 +81,7 @@ public class Player {
         }
 
         // Update the player's position based on the movement vector and speed
-        position.mulAdd(playerMovement, speed * delta);
+        position.mulAdd(playerMovement, playerSpeed * delta);
     }
 
     public void setMovementDirection(float x, float y) {

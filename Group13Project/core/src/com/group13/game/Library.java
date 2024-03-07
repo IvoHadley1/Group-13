@@ -9,6 +9,11 @@ public class Library extends StudySpace {
     }
 
     @Override
+    public void GiveStudyScore() {
+        
+    }
+
+    @Override
     public void interact(Player player) {
         // Implement specific interaction logic for the library
     }

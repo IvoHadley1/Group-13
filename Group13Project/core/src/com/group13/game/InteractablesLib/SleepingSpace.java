@@ -9,4 +9,8 @@ public abstract class SleepingSpace implements Interactable {
         position = new Vector2(x, y);
     }
 
+    public abstract void GiveEnergy();
+
+    public abstract void GiveSleepScore();
+
 }

@@ -9,6 +9,16 @@ public class Bed extends SleepingSpace {
     }
 
     @Override
+    public void GiveEnergy() {
+
+    }
+
+    @Override
+    public void GiveSleepScore() {
+
+    }
+
+    @Override
     public void interact(Player player) {
         // Implement specific interaction logic for the dorm
     }

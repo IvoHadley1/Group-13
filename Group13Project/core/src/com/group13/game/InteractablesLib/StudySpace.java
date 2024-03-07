@@ -8,4 +8,7 @@ public abstract class StudySpace implements Interactable {
     public StudySpace(float x, float y) {
         position = new Vector2(x, y);
     }
+
+    public abstract void GiveStudyScore();
+
 }

@@ -9,6 +9,16 @@ public class Gym extends RecreationalSpace {
     }
 
     @Override
+    public void GiveMotivation() {
+
+    }
+
+    @Override
+    public void GiveMotivationScore() {
+        
+    }
+
+    @Override
     public void interact(Player player) {
         // Implement specific interaction logic for the gym
     }
