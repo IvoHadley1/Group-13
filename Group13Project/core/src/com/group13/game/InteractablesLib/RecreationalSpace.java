@@ -13,6 +13,12 @@ public abstract class RecreationalSpace extends InteractableSpaces {
         position = new Vector2(x, y);
     }
 
+    @Override
+    public void applyInteractions(Player player) {
+        GiveMotivation(player);
+        GiveMotivationScore(player);
+    }
+
     public void GiveMotivation(Player player) {
         player.setCurrentMotivation(player.getCurrentMotivation() + this.motivation);
     }
@@ -34,6 +40,5 @@ public abstract class RecreationalSpace extends InteractableSpaces {
         // Add the calculated random motivation score to the player
         player.addMotivationScore(randomMotivationScore);
     }
-
 
 }

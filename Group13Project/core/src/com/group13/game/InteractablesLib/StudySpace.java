@@ -12,6 +12,12 @@ public abstract class StudySpace extends InteractableSpaces {
         position = new Vector2(x, y);
     }
 
+    @Override
+    public void applyInteractions(Player player) {
+        GiveStudyScore(player);
+    }
+
+
     public void GiveStudyScore(Player player) {
         Random random = new Random();
 

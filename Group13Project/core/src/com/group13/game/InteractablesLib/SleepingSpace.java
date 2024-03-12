@@ -13,6 +13,12 @@ public abstract class SleepingSpace extends InteractableSpaces {
         position = new Vector2(x, y);
     }
 
+    @Override
+    public void applyInteractions(Player player) {
+        GiveEnergy(player);
+        GiveSleepScore(player);
+    }
+
     public void GiveEnergy(Player player) {
         player.setCurrentEnergy(player.getCurrentEnergy() + this.energy);
     }
