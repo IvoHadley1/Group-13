@@ -15,6 +15,8 @@ public class Player {
     private float motivationScore;
     private float sleepScore;
     private float eatingScore;
+
+    private float finalScore;
     private int timesStudied;
     private int timesSlept;
     private int timesActivity;
@@ -36,6 +38,7 @@ public class Player {
         this.motivationScore = 0;
         this.sleepScore = 0;
         this.eatingScore = 0;
+        this.finalScore = 0;
 
         this.timesActivity = 0;
         this.timesEaten = 0;
@@ -51,15 +54,20 @@ public class Player {
     // Update Current Score Percentages
 
     public void UpdateScorePercentages() {
-        studyScorePercentage = calculateScorePercentage(studyScore, timesStudied);
-        eatingScorePercentage = calculateScorePercentage(eatingScore, timesEaten);
-        sleepingScorePercentage = calculateScorePercentage(sleepScore, timesSlept);
-        motivationScorePercentage = calculateScorePercentage(motivationScore, timesActivity);
+        this.studyScorePercentage = calculateScorePercentage(studyScore, timesStudied);
+        this.eatingScorePercentage = calculateScorePercentage(eatingScore, timesEaten);
+        this.sleepingScorePercentage = calculateScorePercentage(sleepScore, timesSlept);
+        this.motivationScorePercentage = calculateScorePercentage(motivationScore, timesActivity);
     }
-
+    
     private float calculateScorePercentage(float totalScore, int count) {
         return count > 0 ? totalScore / count : 0;
     }
+
+    public float calculateFinalScore() {
+        this.finalScore = (studyScorePercentage + sleepingScorePercentage + motivationScorePercentage + eatingScorePercentage) / 4;
+    }
+
 
     // Activity counters
 
