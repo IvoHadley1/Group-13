@@ -14,20 +14,72 @@ public class Player {
     private float studyScore;
     private float motivationScore;
     private float sleepScore;
+    private float eatingScore;
+    private int timesStudied;
+    private int timesSlept;
+    private int timesActivity;
+    private int timesEaten;
+
+    private float studyScorePercentage;
+    private float sleepingScorePercentage;
+    private float motivationScorePercentage;
+    private float eatingScorePercentage;
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
         this.currentEnergy = this.maxEnergy;
         this.currentMotivation = 100;
+        this.playerMovement = new Vector2(0, 0);
+        this.playerSpeed = 250f;
+
         this.studyScore = 0;
         this.motivationScore = 0;
         this.sleepScore = 0;
-        this.playerMovement = new Vector2(0, 0);
-        this.playerSpeed = 250f;
+        this.eatingScore = 0;
+
+        this.timesActivity = 0;
+        this.timesEaten = 0;
+        this.timesSlept = 0;
+        this.timesStudied = 0;
+
+        this.studyScorePercentage = 0;
+        this.sleepingScorePercentage = 0;
+        this.motivationScorePercentage = 0;
+        this.eatingScorePercentage = 0;
+    }
+
+    // Update Current Score Percentages
+
+    public void UpdateScorePercentages() {
+        studyScorePercentage = calculateScorePercentage(studyScore, timesStudied);
+        eatingScorePercentage = calculateScorePercentage(eatingScore, timesEaten);
+        sleepingScorePercentage = calculateScorePercentage(sleepScore, timesSlept);
+        motivationScorePercentage = calculateScorePercentage(motivationScore, timesActivity);
+    }
+
+    private float calculateScorePercentage(float totalScore, int count) {
+        return count > 0 ? totalScore / count : 0;
+    }
+
+    // Activity counters
+
+    public void DidActivity() {
+        this.timesActivity += 1;
+    }
+
+    public void Ate() {
+        this.timesEaten += 1;
+    }
+
+    public void Slept() {
+        this.timesSlept += 1;
+    }
+
+    public void Studied() {
+        this.timesStudied += 1;
     }
 
     // Getters and Setters
-
 
     public Vector2 getPosition() {
         return position;

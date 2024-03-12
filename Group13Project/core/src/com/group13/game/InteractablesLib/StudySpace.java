@@ -15,6 +15,7 @@ public abstract class StudySpace extends InteractableSpaces {
     @Override
     public void applyInteractions(Player player) {
         GiveStudyScore(player);
+        player.Studied();
     }
 
 

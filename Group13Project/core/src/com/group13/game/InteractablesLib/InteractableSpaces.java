@@ -20,6 +20,8 @@ public abstract class InteractableSpaces implements Interactable {
         if (canInteract(player)) {
             applyInteractions(player); // Make sure to pass the player object
         }
+
+        player.UpdateScorePercentages();
     }
 
     // Define applyInteractions to take a Player parameter; implementation will be in subclasses

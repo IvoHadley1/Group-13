@@ -17,6 +17,7 @@ public abstract class RecreationalSpace extends InteractableSpaces {
     public void applyInteractions(Player player) {
         GiveMotivation(player);
         GiveMotivationScore(player);
+        player.DidActivity();
     }
 
     public void GiveMotivation(Player player) {

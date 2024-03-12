@@ -17,6 +17,7 @@ public abstract class SleepingSpace extends InteractableSpaces {
     public void applyInteractions(Player player) {
         GiveEnergy(player);
         GiveSleepScore(player);
+        player.Slept();
     }
 
     public void GiveEnergy(Player player) {
