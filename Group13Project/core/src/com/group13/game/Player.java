@@ -8,15 +8,16 @@ public class Player {
     private final float playerSpeed;
     private final Vector2 playerMovement;
     private final Vector2 position;
+    public final float maxEnergy = 100;
     private float currentEnergy;
     private float currentMotivation;
-    private int studyScore;
-    private int motivationScore;
-    private int sleepScore;
+    private float studyScore;
+    private float motivationScore;
+    private float sleepScore;
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
-        this.currentEnergy = 100;
+        this.currentEnergy = this.maxEnergy;
         this.currentMotivation = 100;
         this.studyScore = 0;
         this.motivationScore = 0;
@@ -43,23 +44,23 @@ public class Player {
         this.currentMotivation = Math.max(0, Math.min(currentMotivation, 100));
     }
 
-    public int getStudyScore() {
+    public float getStudyScore() {
         return studyScore;
     }
 
-    public void addStudyScore(int points) {
-        this.studyScore = Math.max(0, Math.min(studyScore + points, 700));
+    public void addStudyScore(float points) {
+        this.studyScore += points;
     }
 
-    public int getMotivationScore() {
+    public float getMotivationScore() {
         return motivationScore;
     }
 
-    public void addMotivationScore(int points) {
-        this.motivationScore = Math.max(0, Math.min(motivationScore + points, 700));
+    public void addMotivationScore(float points) {
+        this.motivationScore += points;
     }
 
-    public int getSleepScore() {
+    public float getSleepScore() {
         return sleepScore;
     }
 

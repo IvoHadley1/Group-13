@@ -1,16 +1,37 @@
 package com.group13.game.InteractablesLib;
 
 import com.badlogic.gdx.math.Vector2;
+import com.group13.game.Player;
+
+import java.util.Random;
 
 public abstract class SleepingSpace implements Interactable {
     protected Vector2 position;
-
+    protected float energy;
+    protected float sleepScore = 100;
     public SleepingSpace(float x, float y) {
         position = new Vector2(x, y);
     }
 
-    public abstract void GiveEnergy();
+    public void GiveEnergy(Player player){
+        player.setCurrentEnergy(player.getCurrentEnergy() + this.energy);
+    };
 
-    public abstract void GiveSleepScore();
+    public void GiveSleepScore(Player player){
+        Random random = new Random();
+
+        // Calculate the minimum sleep score based on player's current energy
+        float energyDifference = (player.maxEnergy - player.getCurrentEnergy());
+        float minSleepScore = this.sleepScore - energyDifference;
+
+        // Ensure the minimum sleep score is not less than 0
+        minSleepScore = Math.max(minSleepScore, 0);
+
+        // Generate a random sleep score
+        float randomSleepScore = minSleepScore + random.nextFloat(this.sleepScore - minSleepScore + 1);
+
+        // Add the calculated random sleep score to the player
+        player.addMotivationScore(randomSleepScore);
+    };
 
 }

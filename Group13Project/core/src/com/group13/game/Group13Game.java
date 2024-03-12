@@ -10,12 +10,14 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 public class Group13Game extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     Player theStudent;
+    Gym theGym;
 
     @Override
     public void create() {
 
         shapeRenderer = new ShapeRenderer();
         theStudent = new Player(100, 100);
+        // added for debug theGym = new Gym(50, 50);
     }
 
     @Override
