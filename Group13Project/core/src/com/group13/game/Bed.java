@@ -6,21 +6,8 @@ import com.group13.game.InteractablesLib.SleepingSpace;
 public class Bed extends SleepingSpace {
     public Bed(float x, float y) {
         super(x, y);
-    }
-
-    @Override
-    public void GiveEnergy() {
-
-    }
-
-    @Override
-    public void GiveSleepScore() {
-
-    }
-
-    @Override
-    public void interact(Player player) {
-        // Implement specific interaction logic for the dorm
+        this.sleepScore = 100; // if we want to override the sleepScore, we can change this
+        this.energy = 100; // set the energy we want to give to the player
     }
 
     @Override

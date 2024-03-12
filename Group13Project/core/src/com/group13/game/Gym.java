@@ -6,21 +6,8 @@ import com.group13.game.InteractablesLib.RecreationalSpace;
 public class Gym extends RecreationalSpace {
     public Gym(float x, float y) {
         super(x, y);
-    }
-
-    @Override
-    public void GiveMotivation() {
-
-    }
-
-    @Override
-    public void GiveMotivationScore() {
-        
-    }
-
-    @Override
-    public void interact(Player player) {
-        // Implement specific interaction logic for the gym
+        this.motivationScore = 100; // if we want to override the motivationScore, we can change this
+        this.motivation = 25; // set the motivation we want to give to the player
     }
 
     @Override
