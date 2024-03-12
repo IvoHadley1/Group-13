@@ -1,5 +1,6 @@
 package com.group13.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -82,6 +83,11 @@ public class Player {
 
         // Update the player's position based on the movement vector and speed
         position.mulAdd(playerMovement, playerSpeed * delta);
+
+        if (position.x < 0){ position.x = 0; }
+        else if (position.y < 0){ position.y = 0; }
+        else if (position.x > Gdx.graphics.getWidth()){ position.x = Gdx.graphics.getWidth(); }
+        else if (position.y > Gdx.graphics.getHeight()){ position.y = Gdx.graphics.getHeight(); }
     }
 
     public void setMovementDirection(float x, float y) {
