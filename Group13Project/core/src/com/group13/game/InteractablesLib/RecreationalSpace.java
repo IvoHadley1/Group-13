@@ -5,8 +5,7 @@ import com.group13.game.Player;
 
 import java.util.Random;
 
-public abstract class RecreationalSpace implements Interactable {
-    protected Vector2 position;
+public abstract class RecreationalSpace extends InteractableSpaces {
     protected float motivation;
     protected float motivationScore = 100;
 
@@ -14,9 +13,9 @@ public abstract class RecreationalSpace implements Interactable {
         position = new Vector2(x, y);
     }
 
-    public void GiveMotivation(Player player){
+    public void GiveMotivation(Player player) {
         player.setCurrentMotivation(player.getCurrentMotivation() + this.motivation);
-    };
+    }
 
     public void GiveMotivationScore(Player player) {
         Random random = new Random(); // Create a Random object for generating random numbers

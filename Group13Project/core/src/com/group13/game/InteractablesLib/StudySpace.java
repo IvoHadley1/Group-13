@@ -5,15 +5,14 @@ import com.group13.game.Player;
 
 import java.util.Random;
 
-public abstract class StudySpace implements Interactable {
-    protected Vector2 position;
+public abstract class StudySpace extends InteractableSpaces {
     protected float studyScore = 100;
 
     public StudySpace(float x, float y) {
         position = new Vector2(x, y);
     }
 
-    public void GiveStudyScore(Player player){
+    public void GiveStudyScore(Player player) {
         Random random = new Random();
 
         // Calculate the minimum study score based on player's current energy
@@ -28,6 +27,6 @@ public abstract class StudySpace implements Interactable {
 
         // Add the calculated random study score to the player
         player.addMotivationScore(randomStudyScore);
-    };
+    }
 
 }

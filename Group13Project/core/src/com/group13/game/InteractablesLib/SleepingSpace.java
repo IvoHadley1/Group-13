@@ -5,19 +5,19 @@ import com.group13.game.Player;
 
 import java.util.Random;
 
-public abstract class SleepingSpace implements Interactable {
-    protected Vector2 position;
+public abstract class SleepingSpace extends InteractableSpaces {
     protected float energy;
     protected float sleepScore = 100;
+
     public SleepingSpace(float x, float y) {
         position = new Vector2(x, y);
     }
 
-    public void GiveEnergy(Player player){
+    public void GiveEnergy(Player player) {
         player.setCurrentEnergy(player.getCurrentEnergy() + this.energy);
-    };
+    }
 
-    public void GiveSleepScore(Player player){
+    public void GiveSleepScore(Player player) {
         Random random = new Random();
 
         // Calculate the minimum sleep score based on player's current energy
@@ -32,6 +32,6 @@ public abstract class SleepingSpace implements Interactable {
 
         // Add the calculated random sleep score to the player
         player.addMotivationScore(randomSleepScore);
-    };
+    }
 
 }

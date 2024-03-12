@@ -11,11 +11,6 @@ public class Bed extends SleepingSpace {
     }
 
     @Override
-    public void interact(Player player) {
-        // Implement specific interaction logic for the dorm
-    }
-
-    @Override
     public void draw(ShapeRenderer shapeRenderer) {
         // Implement specific drawing logic for the dorm
     }

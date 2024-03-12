@@ -10,12 +10,6 @@ public class Gym extends RecreationalSpace {
         this.motivation = 25; // set the motivation we want to give to the player
     }
 
-
-    @Override
-    public void interact(Player player) {
-        // Implement specific interaction logic for the gym
-    }
-
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
         // Implement specific drawing logic for the gym
