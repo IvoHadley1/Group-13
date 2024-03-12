@@ -9,14 +9,16 @@ public class Player {
     private final Vector2 playerMovement;
     private final Vector2 position;
     public final float maxEnergy = 100;
+
     private float currentEnergy;
     private float currentMotivation;
+
     private float studyScore;
     private float motivationScore;
     private float sleepScore;
     private float eatingScore;
-
     private float finalScore;
+
     private int timesStudied;
     private int timesSlept;
     private int timesActivity;
@@ -59,16 +61,15 @@ public class Player {
         this.sleepingScorePercentage = calculateScorePercentage(sleepScore, timesSlept);
         this.motivationScorePercentage = calculateScorePercentage(motivationScore, timesActivity);
     }
-    
+
     private float calculateScorePercentage(float totalScore, int count) {
         return count > 0 ? totalScore / count : 0;
     }
 
-    public float calculateFinalScore() {
+    public void calculateFinalScore() {
         this.finalScore = (studyScorePercentage + sleepingScorePercentage + motivationScorePercentage + eatingScorePercentage) / 4;
     }
-
-
+    
     // Activity counters
 
     public void DidActivity() {
