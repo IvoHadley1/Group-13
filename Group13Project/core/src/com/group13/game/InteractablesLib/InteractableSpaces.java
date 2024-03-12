@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.group13.game.Player;
 
 public abstract class InteractableSpaces implements Interactable {
+    
     protected Vector2 position;
 
     // Check if the player is within a certain distance and the E key is pressed
