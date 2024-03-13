@@ -5,12 +5,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.group13.game.InteractablesLib.Interactable;
+import com.group13.game.InteractablesLib.StudySpace;
+
+import java.awt.*;
 
 
 public class Group13Game extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     Player theStudent;
     Gym theGym;
+    Library theLibrary;
+    Bed studentRoom;
 
     @Override
     public void create() {
@@ -18,6 +24,15 @@ public class Group13Game extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         theStudent = new Player(100, 100);
         // added for debug theGym = new Gym(50, 50);
+        // can change values as needed
+        theGym = new Gym(500,500, 30, 30);
+        theStudent.addcollision(500,500,30,30);
+
+        theLibrary = new Library(550, 500, 30, 30);
+        theStudent.addcollision(550,500,30,30);
+
+        studentRoom = new Bed(600,500, 30, 30);
+        theStudent.addcollision(600,500,30,30);
     }
 
     @Override
@@ -26,6 +41,10 @@ public class Group13Game extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         HandlePlayerActions();
+
+        theGym.draw(shapeRenderer);
+        theLibrary.draw(shapeRenderer);
+        studentRoom.draw(shapeRenderer);
     }
 
     private void HandlePlayerActions() {

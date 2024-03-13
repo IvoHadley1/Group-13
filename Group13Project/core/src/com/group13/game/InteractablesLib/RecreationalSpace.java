@@ -9,8 +9,8 @@ public abstract class RecreationalSpace extends InteractableSpaces {
     protected float motivation;
     protected float motivationScore = 100;
 
-    public RecreationalSpace(float x, float y) {
-        position = new Vector2(x, y);
+    public RecreationalSpace(float x, float y, float new_width, float new_height) {
+        position = new Vector2(x, y); width = new_width; height = new_height;
     }
 
     @Override

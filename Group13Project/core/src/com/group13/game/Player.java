@@ -4,6 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
     private final float playerSpeed;
     private final Vector2 playerMovement;
@@ -28,6 +32,10 @@ public class Player {
     private float sleepingScorePercentage;
     private float motivationScorePercentage;
     private float eatingScorePercentage;
+
+    private final int radius = 15;
+
+    private List<List<Float>> collisionvalues = new ArrayList<List<Float>>();
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
@@ -138,7 +146,7 @@ public class Player {
     public void draw(ShapeRenderer shapeRenderer) {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
-        shapeRenderer.circle(position.x, position.y, 15);
+        shapeRenderer.circle(position.x, position.y, radius);
         shapeRenderer.end();
     }
 
@@ -151,15 +159,39 @@ public class Player {
         // Update the player's position based on the movement vector and speed
         position.mulAdd(playerMovement, playerSpeed * delta);
 
-        if (position.x < 0) {
-            position.x = 0;
-        } else if (position.y < 0) {
-            position.y = 0;
-        } else if (position.x > Gdx.graphics.getWidth()) {
-            position.x = Gdx.graphics.getWidth();
-        } else if (position.y > Gdx.graphics.getHeight()) {
-            position.y = Gdx.graphics.getHeight();
+        // Prevent movement off screen
+        if (position.x < radius) {
+            position.x = radius;
         }
+        if (position.y < radius) {
+            position.y = radius;
+        }
+        if (position.x > Gdx.graphics.getWidth() - radius) {
+            position.x = Gdx.graphics.getWidth() - radius;
+        }
+        if (position.y > Gdx.graphics.getHeight() - radius) {
+            position.y = Gdx.graphics.getHeight() - radius;
+        }
+
+        // Collision detection
+        for (List<Float> collisionvalue : collisionvalues) {
+            if (((position.x - radius < collisionvalue.get(0) + collisionvalue.get(2))
+                    && (position.x - radius > collisionvalue.get(0) - collisionvalue.get(2))
+                    && (position.y - radius < collisionvalue.get(1) + collisionvalue.get(3))
+                    && (position.y - radius > collisionvalue.get(1) - collisionvalue.get(3)))) {
+                //then colliding
+                position.mulAdd(playerMovement, -playerSpeed * delta);
+            }
+        }
+    }
+
+    public void addcollision(float x, float y, float width, float height){
+        List<Float> newcollision = new ArrayList<Float>();
+        newcollision.add(x);
+        newcollision.add(y);
+        newcollision.add(width);
+        newcollision.add(height);
+        collisionvalues.add(newcollision);
     }
 
     public void setMovementDirection(float x, float y) {
