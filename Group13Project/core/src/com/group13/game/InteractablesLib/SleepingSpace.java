@@ -9,8 +9,8 @@ public abstract class SleepingSpace extends InteractableSpaces {
     protected float energy;
     protected float sleepScore = 100;
 
-    public SleepingSpace(float x, float y) {
-        position = new Vector2(x, y);
+    public SleepingSpace(float x, float y, float new_width, float new_height) {
+        position = new Vector2(x, y); width = new_width; height = new_height;
     }
 
     @Override

@@ -8,8 +8,8 @@ import java.util.Random;
 public abstract class StudySpace extends InteractableSpaces {
     protected float studyScore = 100;
 
-    public StudySpace(float x, float y) {
-        position = new Vector2(x, y);
+    public StudySpace(float x, float y, float new_width, float new_height) {
+        position = new Vector2(x, y); width = new_width; height = new_height;
     }
 
     @Override
