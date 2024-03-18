@@ -21,6 +21,7 @@ public abstract class RecreationalSpace extends InteractableSpaces {
         text.add("");
         text.add("Gym");
         text.add("Test");
+        Group13Game.addTime(2, 0);
         Group13Game.settext(text);
         GiveMotivation(player);
         GiveMotivationScore(player);

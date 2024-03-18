@@ -18,13 +18,20 @@ public abstract class SleepingSpace extends InteractableSpaces {
     @Override
     public void applyInteractions(Player player) {
         ArrayList<String> text = new ArrayList<String>();
-        text.add("");
-        text.add("Bed");
-        text.add("test");
-        Group13Game.settext(text);
-        GiveEnergy(player);
-        GiveSleepScore(player);
-        player.Slept();
+        int time = Group13Game.getTime();
+        if (time < 16){
+            text.add("");
+            text.add("It's too early to sleep!");
+            Group13Game.settext(text);
+        }
+        else {
+            text.add("");
+            text.add("You went to sleep until 9am.");
+            Group13Game.settext(text);
+            GiveEnergy(player);
+            GiveSleepScore(player);
+            player.Slept();
+        }
     }
 
     public void GiveEnergy(Player player) {

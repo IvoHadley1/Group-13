@@ -20,6 +20,7 @@ public abstract class StudySpace extends InteractableSpaces {
         text.add("");
         text.add("Library");
         text.add("test");
+        Group13Game.addTime(3,0);
         Group13Game.settext(text);
         GiveStudyScore(player);
         player.Studied();
