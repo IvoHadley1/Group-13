@@ -34,7 +34,7 @@ public abstract class InteractableSpaces implements Interactable {
         font.draw(batch, name, position.x - (name.length() * 8), position.y + 90);
         batch.end();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
             player.lockmovement();
             applyInteractions(player); // Make sure to pass the player object
             Group13Game.drawtextbox();

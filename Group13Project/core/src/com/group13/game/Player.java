@@ -219,4 +219,6 @@ public class Player {
     public void lockmovement(){
         canmove = false;
     }
+
+    public void startmovement() {canmove = true;}
 }

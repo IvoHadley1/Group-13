@@ -9,10 +9,13 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.group13.game.InteractablesLib.Interactable;
 import com.group13.game.InteractablesLib.StudySpace;
 
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 
 public class Group13Game extends ApplicationAdapter {
@@ -25,10 +28,17 @@ public class Group13Game extends ApplicationAdapter {
     Food Piazza;
 
     private static boolean showTextbox = false;
-    private static String textboxText = "test";
+    private static ArrayList<String> textboxText =new ArrayList<String>();
+    private static int currenttext = 0;
+
+    private float timer;
+    private int hourtimer;
+    private String displaytimer;
 
     @Override
     public void create() {
+
+        textboxText.add("test");
 
         shapeRenderer = new ShapeRenderer();
         theStudent = new Player(100, 100);
@@ -45,6 +55,8 @@ public class Group13Game extends ApplicationAdapter {
 
         Piazza = new Food(900, 500, 30, 30, "The Piazza");
         theStudent.addcollision(Piazza);
+
+        startDay();
     }
 
     @Override
@@ -53,6 +65,7 @@ public class Group13Game extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         HandlePlayerActions();
+        HandleTimer();
 
         theGym.draw(shapeRenderer);
         theLibrary.draw(shapeRenderer);
@@ -70,9 +83,40 @@ public class Group13Game extends ApplicationAdapter {
             font.setColor(Color.BLACK);
             Batch batch = new SpriteBatch();
             batch.begin();
-            font.draw(batch, textboxText, 120, 180);
+            font.draw(batch, textboxText.get(currenttext), 120, 180);
             batch.end();
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+                currenttext++;
+                if (currenttext >= textboxText.size()){
+                    hidetextbox();
+                    theStudent.startmovement();
+                }
+            }
         }
+    }
+
+    private void startDay(){
+        hourtimer = 9;
+        timer = 0;
+    }
+
+    private void HandleTimer(){
+        timer += Gdx.graphics.getDeltaTime();
+        if (timer > 60){
+            timer = 0;
+            hourtimer++;
+        }
+        if (timer < 10){ displaytimer = Integer.toString(hourtimer) + ":0" + String.valueOf((int) timer);}
+        else {displaytimer = Integer.toString(hourtimer) + ":" + String.valueOf((int) timer);}
+
+        //draw timer
+        BitmapFont font = new BitmapFont();
+        font.getData().setScale(3);
+        Batch batch = new SpriteBatch();
+        batch.begin();
+        font.draw(batch, displaytimer, 550, 760);
+        batch.end();
     }
 
     private void HandlePlayerActions() {
@@ -114,7 +158,8 @@ public class Group13Game extends ApplicationAdapter {
         showTextbox = false;
     }
 
-    public static void settext(String text){
+    public static void settext(ArrayList<String> text){
+        currenttext = 0;
         textboxText = text;
     }
 }
