@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.group13.game.Group13Game;
 import com.group13.game.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class StudySpace extends InteractableSpaces {
@@ -15,7 +16,11 @@ public abstract class StudySpace extends InteractableSpaces {
 
     @Override
     public void applyInteractions(Player player) {
-        Group13Game.settext("Library");
+        ArrayList<String> text = new ArrayList<String>();
+        text.add("");
+        text.add("Library");
+        text.add("test");
+        Group13Game.settext(text);
         GiveStudyScore(player);
         player.Studied();
     }

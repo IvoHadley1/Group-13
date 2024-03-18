@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.group13.game.Group13Game;
 import com.group13.game.Player;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class SleepingSpace extends InteractableSpaces {
@@ -16,7 +17,11 @@ public abstract class SleepingSpace extends InteractableSpaces {
 
     @Override
     public void applyInteractions(Player player) {
-        Group13Game.settext("Bed");
+        ArrayList<String> text = new ArrayList<String>();
+        text.add("");
+        text.add("Bed");
+        text.add("test");
+        Group13Game.settext(text);
         GiveEnergy(player);
         GiveSleepScore(player);
         player.Slept();
