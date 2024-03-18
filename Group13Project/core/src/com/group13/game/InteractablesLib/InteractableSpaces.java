@@ -31,7 +31,7 @@ public abstract class InteractableSpaces implements Interactable {
         font.getData().setScale(3);
         Batch batch = new SpriteBatch();
         batch.begin();
-        font.draw(batch, name, position.x - (name.length() * 8), position.y + 90);
+        font.draw(batch, name, position.x + (width / 2) - (name.length() * 8), position.y + height + 90);
         batch.end();
 
         if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
