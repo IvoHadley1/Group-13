@@ -20,6 +20,7 @@ public abstract class FoodSpace extends InteractableSpaces {
         text.add("");
         text.add("Piazza");
         text.add("test");
+        Group13Game.addTime(0, 30);
         Group13Game.settext(text);
         GiveHunger(player);
         player.Ate();
