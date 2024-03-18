@@ -3,6 +3,8 @@ package com.group13.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.group13.game.InteractablesLib.Interactable;
+import com.group13.game.InteractablesLib.InteractableSpaces;
 
 import java.io.Console;
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ public class Player {
 
     private float currentEnergy;
     private float currentMotivation;
+
+    private float currentHunger; //set to 3 in morning, -1 when eating. penalty if not 0 at end of day
 
     private float studyScore;
     private float motivationScore;
@@ -35,7 +39,10 @@ public class Player {
 
     private final int radius = 15;
 
-    private List<List<Float>> collisionvalues = new ArrayList<List<Float>>();
+    private final int actiondistance = 25;
+    private boolean canmove = true;
+
+    private List<InteractableSpaces> collisions = new ArrayList<InteractableSpaces>();
 
     public Player(float x, float y) {
         position = new Vector2(x, y);
@@ -134,6 +141,9 @@ public class Player {
         this.motivationScore += points;
     }
 
+    public float getCurrentHunger() {return currentHunger;}
+    public void setCurrentHunger(float hunger) {currentHunger = hunger;}
+
     public float getSleepScore() {
         return sleepScore;
     }
@@ -157,46 +167,56 @@ public class Player {
         }
 
         // Update the player's position based on the movement vector and speed
-        position.mulAdd(playerMovement, playerSpeed * delta);
+        if (canmove){
+            position.mulAdd(playerMovement, playerSpeed * delta);
 
-        // Prevent movement off screen
-        if (position.x < radius) {
-            position.x = radius;
-        }
-        if (position.y < radius) {
-            position.y = radius;
-        }
-        if (position.x > Gdx.graphics.getWidth() - radius) {
-            position.x = Gdx.graphics.getWidth() - radius;
-        }
-        if (position.y > Gdx.graphics.getHeight() - radius) {
-            position.y = Gdx.graphics.getHeight() - radius;
-        }
+            // Prevent movement off screen
+            if (position.x < radius) {
+                position.x = radius;
+            }
+            if (position.y < radius) {
+                position.y = radius;
+            }
+            if (position.x > Gdx.graphics.getWidth() - radius) {
+                position.x = Gdx.graphics.getWidth() - radius;
+            }
+            if (position.y > Gdx.graphics.getHeight() - radius) {
+                position.y = Gdx.graphics.getHeight() - radius;
+            }
 
-        // Collision detection
-        for (List<Float> collisionvalue : collisionvalues) {
-            if (((position.x - radius < collisionvalue.get(0) + collisionvalue.get(2))
-                    && (position.x - radius > collisionvalue.get(0) - collisionvalue.get(2))
-                    && (position.y - radius < collisionvalue.get(1) + collisionvalue.get(3))
-                    && (position.y - radius > collisionvalue.get(1) - collisionvalue.get(3)))) {
-                //then colliding
-                position.mulAdd(playerMovement, -playerSpeed * delta);
+            // Collision detection
+            for (int i = 0; i< collisions.size(); i++) {
+                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth())
+                        && (position.x - radius > collisions.get(i).getPosition().x - collisions.get(i).getWidth())
+                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight())
+                        && (position.y - radius > collisions.get(i).getPosition().y - collisions.get(i).getHeight())) {
+                    //then colliding
+                    position.mulAdd(playerMovement, -playerSpeed * delta);
+                }
+            }
+
+            //detect if close enough to interact
+
+            for (int i = 0; i< collisions.size(); i++) {
+                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth() + actiondistance)
+                        && (position.x - radius > collisions.get(i).getPosition().x - collisions.get(i).getWidth() - actiondistance)
+                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight() + actiondistance)
+                        && (position.y - radius > collisions.get(i).getPosition().y - collisions.get(i).getHeight() - actiondistance)) {
+                    collisions.get(i).interact(this);
+                }
             }
         }
     }
 
-    public void addcollision(float x, float y, float width, float height){
-        List<Float> newcollision = new ArrayList<Float>();
-        newcollision.add(x);
-        newcollision.add(y);
-        newcollision.add(width);
-        newcollision.add(height);
-        collisionvalues.add(newcollision);
+    public void addcollision(InteractableSpaces newcollision){
+        collisions.add(newcollision);
     }
 
     public void setMovementDirection(float x, float y) {
         playerMovement.set(x, y);
     }
 
-
+    public void lockmovement(){
+        canmove = false;
+    }
 }
