@@ -1,15 +1,15 @@
 package com.group13.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.group13.game.InteractablesLib.RecreationalSpace;
+import com.group13.game.InteractablesLib.FoodSpace;
+import com.group13.game.InteractablesLib.StudySpace;
 
-public class Gym extends RecreationalSpace {
-    public Gym(float x, float y, float new_width, float new_height, String new_name) {
+public class Food extends FoodSpace {
+    public Food(float x, float y, float new_width, float new_height, String new_name) {
         super(x, y, new_width, new_height, new_name);
-        this.motivationScore = 100; // if we want to override the motivationScore, we can change this
-        this.motivation = 25; // set the motivation we want to give to the player
+        this.hunger = 100; // if we want to override the studyScore, we can change this
     }
+
     @Override
     public void draw(ShapeRenderer shapeRenderer) {
         // placeholder simple shape render
@@ -19,4 +19,3 @@ public class Gym extends RecreationalSpace {
         shapeRenderer.end();
     }
 }
-

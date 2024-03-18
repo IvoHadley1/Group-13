@@ -1,14 +1,47 @@
 package com.group13.game.InteractablesLib;
 
 import com.badlogic.gdx.math.Vector2;
+import com.group13.game.Group13Game;
+import com.group13.game.Player;
 
-public abstract class StudySpace implements Interactable {
-    protected Vector2 position;
+import java.util.ArrayList;
+import java.util.Random;
 
-    public StudySpace(float x, float y) {
-        position = new Vector2(x, y);
+public abstract class StudySpace extends InteractableSpaces {
+    protected float studyScore = 100;
+
+    public StudySpace(float x, float y, float new_width, float new_height, String new_name) {
+        position = new Vector2(x, y); width = new_width; height = new_height; name = new_name;
     }
 
-    public abstract void GiveStudyScore();
+    @Override
+    public void applyInteractions(Player player) {
+        ArrayList<String> text = new ArrayList<String>();
+        text.add("");
+        text.add("Library");
+        text.add("test");
+        Group13Game.addTime(3,0);
+        Group13Game.settext(text);
+        GiveStudyScore(player);
+        player.Studied();
+    }
+
+
+    public void GiveStudyScore(Player player) {
+        Random random = new Random();
+
+        // Calculate the minimum study score based on player's current energy
+        float energyDifference = (player.maxEnergy - player.getCurrentEnergy());
+        float minStudyScore = (this.studyScore - energyDifference);
+
+        // Ensure the minimum study score is not less than 0
+        minStudyScore = Math.max(minStudyScore, 0);
+
+        // Generate a random study score
+        float randomStudyScore = minStudyScore + random.nextFloat((this.studyScore - minStudyScore + 1));
+
+        // Add the calculated random study score to the player
+        player.addMotivationScore(randomStudyScore);
+    }
 
 }
