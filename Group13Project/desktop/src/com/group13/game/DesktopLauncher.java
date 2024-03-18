@@ -11,7 +11,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("Group-13");
-		config.setWindowedMode(1200,800);
+		config.setWindowedMode(3600,2000);
 		new Lwjgl3Application(new Group13Game(), config);
 	}
 }

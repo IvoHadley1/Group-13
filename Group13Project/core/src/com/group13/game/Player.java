@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.group13.game.InteractablesLib.Interactable;
 import com.group13.game.InteractablesLib.InteractableSpaces;
 
+import java.beans.VetoableChangeListener;
 import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public class Player {
     private final float playerSpeed;
     private final Vector2 playerMovement;
-    private final Vector2 position;
+    private Vector2 position;
     public final float maxEnergy = 100;
 
     private float currentEnergy;
@@ -39,7 +40,7 @@ public class Player {
 
     private final int radius = 15;
 
-    private final int actiondistance = 25;
+    private final int actiondistance = 100;
     private boolean canmove = true;
 
     private List<InteractableSpaces> collisions = new ArrayList<InteractableSpaces>();
@@ -49,7 +50,7 @@ public class Player {
         this.currentEnergy = this.maxEnergy;
         this.currentMotivation = 100;
         this.playerMovement = new Vector2(0, 0);
-        this.playerSpeed = 250f;
+        this.playerSpeed = 350f;
 
         this.studyScore = 0;
         this.motivationScore = 0;
@@ -184,24 +185,13 @@ public class Player {
                 position.y = Gdx.graphics.getHeight() - radius;
             }
 
-            // Collision detection
-            for (int i = 0; i< collisions.size(); i++) {
-                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth())
-                        && (position.x - radius > collisions.get(i).getPosition().x - collisions.get(i).getWidth())
-                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight())
-                        && (position.y - radius > collisions.get(i).getPosition().y - collisions.get(i).getHeight())) {
-                    //then colliding
-                    position.mulAdd(playerMovement, -playerSpeed * delta);
-                }
-            }
-
             //detect if close enough to interact
 
             for (int i = 0; i< collisions.size(); i++) {
                 if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth() + actiondistance)
-                        && (position.x - radius > collisions.get(i).getPosition().x - collisions.get(i).getWidth() - actiondistance)
+                        && (position.x - radius > collisions.get(i).getPosition().x - actiondistance)
                         && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight() + actiondistance)
-                        && (position.y - radius > collisions.get(i).getPosition().y - collisions.get(i).getHeight() - actiondistance)) {
+                        && (position.y + radius > collisions.get(i).getPosition().y - actiondistance)) {
                     collisions.get(i).interact(this);
                 }
             }
@@ -221,4 +211,8 @@ public class Player {
     }
 
     public void startmovement() {canmove = true;}
+
+    public void setPosition(int x, int y){
+        position = new Vector2(x,y);
+    }
 }
