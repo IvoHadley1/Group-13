@@ -3,7 +3,11 @@ package com.group13.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.group13.game.InteractablesLib.Interactable;
 import com.group13.game.InteractablesLib.StudySpace;
@@ -18,6 +22,11 @@ public class Group13Game extends ApplicationAdapter {
     Library theLibrary;
     Bed studentRoom;
 
+    Food Piazza;
+
+    private static boolean showTextbox = false;
+    private static String textboxText = "test";
+
     @Override
     public void create() {
 
@@ -25,14 +34,17 @@ public class Group13Game extends ApplicationAdapter {
         theStudent = new Player(100, 100);
         // added for debug theGym = new Gym(50, 50);
         // can change values as needed
-        theGym = new Gym(500,500, 30, 30);
-        theStudent.addcollision(500,500,30,30);
+        theGym = new Gym(300,500, 30, 30, "Gym");
+        theStudent.addcollision(theGym);
 
-        theLibrary = new Library(550, 500, 30, 30);
-        theStudent.addcollision(550,500,30,30);
+        theLibrary = new Library(500, 500, 30, 30, "Library");
+        theStudent.addcollision(theLibrary);
 
-        studentRoom = new Bed(600,500, 30, 30);
-        theStudent.addcollision(600,500,30,30);
+        studentRoom = new Bed(700,500, 30, 30, "Dorm Room");
+        theStudent.addcollision(studentRoom);
+
+        Piazza = new Food(900, 500, 30, 30, "The Piazza");
+        theStudent.addcollision(Piazza);
     }
 
     @Override
@@ -45,6 +57,22 @@ public class Group13Game extends ApplicationAdapter {
         theGym.draw(shapeRenderer);
         theLibrary.draw(shapeRenderer);
         studentRoom.draw(shapeRenderer);
+        Piazza.draw(shapeRenderer);
+
+        if (showTextbox){
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
+            shapeRenderer.rect(100, 50, 1000, 150);
+            shapeRenderer.end();
+
+            BitmapFont font = new BitmapFont();
+            font.getData().setScale(3);
+            font.setColor(Color.BLACK);
+            Batch batch = new SpriteBatch();
+            batch.begin();
+            font.draw(batch, textboxText, 120, 180);
+            batch.end();
+        }
     }
 
     private void HandlePlayerActions() {
@@ -78,4 +106,15 @@ public class Group13Game extends ApplicationAdapter {
         shapeRenderer.dispose();
     }
 
+    public static void drawtextbox(){
+        showTextbox = true;
+    }
+
+    public static void hidetextbox(){
+        showTextbox = false;
+    }
+
+    public static void settext(String text){
+        textboxText = text;
+    }
 }
