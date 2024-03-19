@@ -1,6 +1,6 @@
 package com.group13.game;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -19,13 +19,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 
-public class Group13Game extends ApplicationAdapter {
+public class Group13Game extends Game {
+
     private ShapeRenderer shapeRenderer;
+
     Player theStudent;
     Gym theGym;
     Library theLibrary;
     Bed studentRoom;
     Food Piazza;
+
     private Texture texture;
     private static boolean showTextbox = false;
     private static ArrayList<String> textboxText = new ArrayList<String>();
@@ -41,12 +44,15 @@ public class Group13Game extends ApplicationAdapter {
     private static float transitiontimer = 0;
     private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
     private int day;
+
     private TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
     OrthographicCamera camera;
 
     @Override
     public void create() {
+
+        this.setScreen(new MainMenuScreen(this));
 
         textboxText.add("test");
 
