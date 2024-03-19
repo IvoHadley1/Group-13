@@ -39,9 +39,7 @@ public class TutorialScreen implements Screen {
         tutorialLabel.setWrap(true);
         table.add(tutorialLabel).width(400).pad(20).row();
 
-        Label tutorialText = new Label("Tutorial instructions go here...", labelStyle);
-        tutorialText.setAlignment(Align.center);
-        tutorialText.setWrap(true);
+        Label tutorialText = getLabel(labelStyle);
         table.add(tutorialText).width(400).pad(20).row();
 
         TextButtonStyle buttonStyle = new TextButtonStyle();
@@ -59,6 +57,19 @@ public class TutorialScreen implements Screen {
         });
 
         table.add(backButton).size(200, 60).pad(20);
+    }
+
+    private static Label getLabel(Label.LabelStyle labelStyle) {
+        Label tutorialText = new Label(
+                "- **Time Management:** Plan your day; every action from studying to exercising consumes time.\n\n" +
+                        "- **Energy & Motivation:** Vital for performing tasks; low levels reduce activity effectiveness.\n\n" +
+                        "- **Study to Boost Scores:** Hit the books in the library to increase your study score.\n\n" +
+                        "- **Eat to Replenish Energy:** Visit The Piazza to eat and recover energy, affecting other activities.\n\n" +
+                        "- **Exercise for Motivation:** Workout at the gym to raise your motivation, enhancing overall performance.\n\n" +
+                        "- **Sleep to Refresh:** End the day in your dorm to restore energy and improve next day's potential.", labelStyle);
+        tutorialText.setAlignment(Align.center);
+        tutorialText.setWrap(true);
+        return tutorialText;
     }
 
     @Override

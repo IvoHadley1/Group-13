@@ -1,9 +1,11 @@
 package com.group13.game;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen, InputProcessor {
     private Group13Game gameLogic; // Assuming Group13Game holds the game logic
 
     public GameScreen(Game game) {
@@ -14,6 +16,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(this);
         gameLogic.startGame();
     }
 
@@ -27,6 +30,51 @@ public class GameScreen implements Screen {
     public void resize(int width, int height) {
         // Delegate resize to the game logic if needed
         gameLogic.resize(width, height);
+    }
+
+    @Override
+    public boolean keyDown(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyUp(int i) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char c) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchCancelled(int i, int i1, int i2, int i3) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int i, int i1, int i2) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int i, int i1) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(float v, float v1) {
+        return false;
     }
 
     @Override
