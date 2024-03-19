@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -12,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class MainMenuScreen implements Screen {
@@ -37,9 +41,21 @@ public class MainMenuScreen implements Screen {
 
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.font = new BitmapFont();
+        buttonStyle.font.getData().setScale(2f); // Increase the font scale factor
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.LIGHT_GRAY;
         buttonStyle.downFontColor = Color.DARK_GRAY;
+
+        // Create a lighter background color drawable
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(0.8f, 0.8f, 0.8f, 1)); // Light gray color
+        pixmap.fill();
+        TextureRegionDrawable drawable = new TextureRegionDrawable(new TextureRegion(new Texture(pixmap)));
+        pixmap.dispose();
+
+        buttonStyle.up = drawable;
+        buttonStyle.over = drawable;
+        buttonStyle.down = drawable;
 
         TextButton playButton = new TextButton("Play", buttonStyle);
         playButton.addListener(new ClickListener() {
@@ -58,8 +74,8 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        table.add(playButton).size(200, 60).spaceBottom(20).row();
-        table.add(tutorialButton).size(200, 60);
+        table.add(playButton).size(300, 100).spaceBottom(20).row();
+        table.add(tutorialButton).size(300, 100);
     }
 
     @Override

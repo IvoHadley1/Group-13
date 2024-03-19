@@ -31,19 +31,21 @@ public class TutorialScreen implements Screen {
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = new BitmapFont();
+        labelStyle.font.getData().setScale(1.5f);
         labelStyle.fontColor = Color.WHITE;
         labelStyle.background = null;
 
         Label tutorialLabel = new Label("Tutorial", labelStyle);
         tutorialLabel.setAlignment(Align.center);
         tutorialLabel.setWrap(true);
-        table.add(tutorialLabel).width(400).pad(20).row();
+        table.add(tutorialLabel).width(600).pad(20).row();
 
         Label tutorialText = getLabel(labelStyle);
-        table.add(tutorialText).width(400).pad(20).row();
+        table.add(tutorialText).width(600).pad(20).row();
 
         TextButtonStyle buttonStyle = new TextButtonStyle();
         buttonStyle.font = new BitmapFont();
+        buttonStyle.font.getData().setScale(1.5f);
         buttonStyle.fontColor = Color.WHITE;
         buttonStyle.overFontColor = Color.LIGHT_GRAY;
         buttonStyle.downFontColor = Color.DARK_GRAY;
@@ -56,7 +58,7 @@ public class TutorialScreen implements Screen {
             }
         });
 
-        table.add(backButton).size(200, 60).pad(20);
+        table.add(backButton).size(400, 60).pad(20);
     }
 
     private static Label getLabel(Label.LabelStyle labelStyle) {
