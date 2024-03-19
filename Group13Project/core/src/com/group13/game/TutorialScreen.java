@@ -1,78 +1,102 @@
 package com.group13.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class TutorialScreen implements Screen {
 
     private Stage stage;
-    private Game game;
+    private Group13Game game;
 
-    public TutorialScreen(Game game) {
+    public TutorialScreen(Group13Game game) {
         this.game = game;
-        stage = new Stage();
+        stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json")); // Ensure you have a uiskin.json file
+        Table table = new Table();
+        table.setFillParent(true);
+        stage.addActor(table);
 
-        Label tutorialLabel = new Label("Tutorial Text Here", skin);
-        tutorialLabel.setPosition(100, 300); // Adjust as needed
-        tutorialLabel.setSize(400, 300);
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = new BitmapFont();
+        labelStyle.fontColor = Color.WHITE;
+        labelStyle.background = null;
 
-        TextButton backButton = new TextButton("Back", skin);
-        backButton.setPosition(300, 50); // Adjust as needed
-        backButton.setSize(200, 60);
-        backButton.addListener(new ChangeListener() {
+        Label tutorialLabel = new Label("Tutorial", labelStyle);
+        tutorialLabel.setAlignment(Align.center);
+        tutorialLabel.setWrap(true);
+        table.add(tutorialLabel).width(400).pad(20).row();
+
+        Label tutorialText = new Label("Tutorial instructions go here...", labelStyle);
+        tutorialText.setAlignment(Align.center);
+        tutorialText.setWrap(true);
+        table.add(tutorialText).width(400).pad(20).row();
+
+        TextButtonStyle buttonStyle = new TextButtonStyle();
+        buttonStyle.font = new BitmapFont();
+        buttonStyle.fontColor = Color.WHITE;
+        buttonStyle.overFontColor = Color.LIGHT_GRAY;
+        buttonStyle.downFontColor = Color.DARK_GRAY;
+
+        TextButton backButton = new TextButton("Back", buttonStyle);
+        backButton.addListener(new ClickListener() {
             @Override
-            public void changed(ChangeEvent event, com.badlogic.gdx.scenes.scene2d.Actor actor) {
-                game.setScreen(new MainMenuScreen(game)); // Go back to main menu
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new MainMenuScreen(game));
             }
         });
 
-        stage.addActor(tutorialLabel);
-        stage.addActor(backButton);
+        table.add(backButton).size(200, 60).pad(20);
     }
 
     @Override
     public void show() {
+
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(54f / 255f, 57f / 255f, 63f / 255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.act(delta);
         stage.draw();
     }
 
-    // Implement other required methods: resize, pause, resume, hide, dispose
     @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
     @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
-    @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 }

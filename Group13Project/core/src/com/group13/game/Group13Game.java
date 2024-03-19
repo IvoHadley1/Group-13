@@ -51,7 +51,6 @@ public class Group13Game extends Game {
 
     @Override
     public void create() {
-
         this.setScreen(new MainMenuScreen(this));
 
         textboxText.add("test");
@@ -75,12 +74,16 @@ public class Group13Game extends Game {
 
         day = -1;
 
-        mapRenderer = setupMap();
 
         camera = new OrthographicCamera(1200, 600);
         camera.position.set(600, 300, 0);
         camera.update();
 
+
+    }
+
+    public void setupGame() {
+        mapRenderer = setupMap();
         startDay();
     }
 
@@ -91,75 +94,80 @@ public class Group13Game extends Game {
 
     @Override
     public void render() {
-        camera.update();
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (getScreen() instanceof GameScreen) {
 
-        theGym.draw(shapeRenderer); //collision renderers
-        theLibrary.draw(shapeRenderer);
-        studentRoom.draw(shapeRenderer);
-        Piazza.draw(shapeRenderer);
+            camera.update();
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        mapRenderer.setView(camera);
-        mapRenderer.render();
+            theGym.draw(shapeRenderer); //collision renderers
+            theLibrary.draw(shapeRenderer);
+            studentRoom.draw(shapeRenderer);
+            Piazza.draw(shapeRenderer);
 
-        HandlePlayerActions();
+            mapRenderer.setView(camera);
+            mapRenderer.render();
 
-        if (showTextbox) {
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
-            shapeRenderer.rect(820, 100, 2000, 300);
-            shapeRenderer.end();
+            HandlePlayerActions();
 
-            BitmapFont font = new BitmapFont();
-            font.getData().setScale(7);
-            font.setColor(Color.BLACK);
-            Batch batch = new SpriteBatch();
-            batch.begin();
-            font.draw(batch, textboxText.get(currenttext), 850, 380);
-            batch.end();
+            if (showTextbox) {
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
+                shapeRenderer.rect(820, 100, 2000, 300);
+                shapeRenderer.end();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-                currenttext++;
-                if (currenttext >= textboxText.size()) {
-                    hidetextbox();
-                    if (textboxText.get(1) == "You went to sleep until 9am." || textboxText.get(1) == "You fell asleep!") {
-                        endDay(theStudent);
-                    } else {
-                        theStudent.startmovement();
+                BitmapFont font = new BitmapFont();
+                font.getData().setScale(7);
+                font.setColor(Color.BLACK);
+                Batch batch = new SpriteBatch();
+                batch.begin();
+                font.draw(batch, textboxText.get(currenttext), 850, 380);
+                batch.end();
+
+                if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+                    currenttext++;
+                    if (currenttext >= textboxText.size()) {
+                        hidetextbox();
+                        if (textboxText.get(1) == "You went to sleep until 9am." || textboxText.get(1) == "You fell asleep!") {
+                            endDay(theStudent);
+                        } else {
+                            theStudent.startmovement();
+                        }
                     }
                 }
             }
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.WHITE); // Yellow color
+            if (dates.get(day) != "Wednesday") {
+                shapeRenderer.rect(1540, 1845, 550, 120);
+            } else {
+                shapeRenderer.rect(1540, 1845, 620, 120);
+            }
+            shapeRenderer.end();
+
+            Batch batch = new SpriteBatch();
+            String timerimage = "";
+            if (hourtimer < 16) {
+                timerimage = "sun.png";
+            } else if (hourtimer < 20) {
+                timerimage = "evening.png";
+            } else {
+                timerimage = "moon.png";
+            }
+            texture = new Texture(Gdx.files.internal(timerimage));
+            batch.begin();
+            batch.draw(texture, 1555, 1855, 100, 100);
+            batch.end();
+
+            HandleTimer();
+
+            if (daytransition) {
+                HandleDayChange();
+            }
         }
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.WHITE); // Yellow color
-        if (dates.get(day) != "Wednesday") {
-            shapeRenderer.rect(1540, 1845, 550, 120);
-        } else {
-            shapeRenderer.rect(1540, 1845, 620, 120);
-        }
-        shapeRenderer.end();
-
-        Batch batch = new SpriteBatch();
-        String timerimage = "";
-        if (hourtimer < 16) {
-            timerimage = "sun.png";
-        } else if (hourtimer < 20) {
-            timerimage = "evening.png";
-        } else {
-            timerimage = "moon.png";
-        }
-        texture = new Texture(Gdx.files.internal(timerimage));
-        batch.begin();
-        batch.draw(texture, 1555, 1855, 100, 100);
-        batch.end();
-
-        HandleTimer();
-
-        if (daytransition) {
-            HandleDayChange();
-        }
+        super.render();
 
     }
 

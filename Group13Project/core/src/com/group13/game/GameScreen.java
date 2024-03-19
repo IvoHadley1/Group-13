@@ -1,58 +1,57 @@
 package com.group13.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen implements Screen {
-    private Group13Game game;
+    private Group13Game gameLogic; // Assuming Group13Game holds the game logic
 
-    public GameScreen(Group13Game game) {
-        this.game = game;
-
-        // Initialization code that's currently in your create() method
-        game.create();
+    public GameScreen(Game game) {
+        // Assuming Group13Game can be initialized without arguments
+        // Or modify it to take arguments if necessary
+        gameLogic = new Group13Game();
+        gameLogic.create(); // Call any initialization methods needed for your game
     }
 
     @Override
     public void show() {
-        // This method will be called when this screen is set, you can initialize your game world here
+        gameLogic.setupGame();
     }
 
     @Override
     public void render(float delta) {
-        // Clear the screen
-        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1); // White background
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Your game's rendering code goes here
-        game.render();
+        gameLogic.render(); // Delegate to the game logic render method
     }
 
     @Override
     public void resize(int width, int height) {
-        // Resize your game world here
-        game.resize(width, height);
+        // Delegate resize to the game logic if needed
+        gameLogic.resize(width, height);
     }
 
     @Override
     public void pause() {
-        // Handle pausing the game
+        // Delegate pause to the game logic if it has this method
     }
 
     @Override
     public void resume() {
-        // Handle resuming the game
+        // Delegate resume to the game logic if it has this method
     }
 
     @Override
     public void hide() {
-        // This method is called when this screen is no longer the current screen
+        // Called when this screen is no longer the current screen
     }
 
     @Override
     public void dispose() {
-        // Dispose of assets and cleanup here
-        game.dispose();
+        // Delegate dispose to the game logic to clean up resources
+        gameLogic.dispose();
     }
 }
