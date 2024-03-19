@@ -3,7 +3,6 @@ package com.group13.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,15 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.group13.game.InteractablesLib.Interactable;
-import com.group13.game.InteractablesLib.StudySpace;
 
-import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -36,7 +28,7 @@ public class Group13Game extends ApplicationAdapter {
     Food Piazza;
     private Texture texture;
     private static boolean showTextbox = false;
-    private static ArrayList<String> textboxText =new ArrayList<String>();
+    private static ArrayList<String> textboxText = new ArrayList<String>();
     private static int currenttext = 0;
 
     private static float timer;
@@ -63,13 +55,13 @@ public class Group13Game extends ApplicationAdapter {
         // added for debug theGym = new Gym(50, 50);
         // can change values as needed
         //location and size are for defining interaction distance (i.e. where does the player need to be to interact)
-        theGym = new Gym(3570,1130, 30, 150, "Gym");
+        theGym = new Gym(3570, 1130, 30, 150, "Gym");
         theStudent.addcollision(theGym);
 
         theLibrary = new Library(400, 100, 450, 600, "CS Building");
         theStudent.addcollision(theLibrary);
 
-        studentRoom = new Bed(630,1650, 500, 200, "Dorm Room");
+        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
         theStudent.addcollision(studentRoom);
 
         Piazza = new Food(2150, 250, 150, 600, "The Piazza");
@@ -79,14 +71,14 @@ public class Group13Game extends ApplicationAdapter {
 
         mapRenderer = setupMap();
 
-        camera = new OrthographicCamera(1200,600);
-        camera.position.set(600,300, 0);
+        camera = new OrthographicCamera(1200, 600);
+        camera.position.set(600, 300, 0);
         camera.update();
 
         startDay();
     }
 
-    public OrthogonalTiledMapRenderer setupMap(){
+    public OrthogonalTiledMapRenderer setupMap() {
         map = new TmxMapLoader().load("Map1.tmx");
         return new OrthogonalTiledMapRenderer(map, 1);
     }
@@ -107,7 +99,7 @@ public class Group13Game extends ApplicationAdapter {
 
         HandlePlayerActions();
 
-        if (showTextbox){
+        if (showTextbox) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
             shapeRenderer.rect(820, 100, 2000, 300);
@@ -121,14 +113,13 @@ public class Group13Game extends ApplicationAdapter {
             font.draw(batch, textboxText.get(currenttext), 850, 380);
             batch.end();
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)){
+            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 currenttext++;
-                if (currenttext >= textboxText.size()){
+                if (currenttext >= textboxText.size()) {
                     hidetextbox();
-                    if (textboxText.get(1) == "You went to sleep until 9am." || textboxText.get(1) == "You fell asleep!"){
-                        endDay();
-                    }
-                    else{
+                    if (textboxText.get(1) == "You went to sleep until 9am." || textboxText.get(1) == "You fell asleep!") {
+                        endDay(theStudent);
+                    } else {
                         theStudent.startmovement();
                     }
                 }
@@ -137,15 +128,22 @@ public class Group13Game extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE); // Yellow color
-        if (dates.get(day) != "Wednesday"){shapeRenderer.rect(1540, 1845, 550, 120);}
-        else{ shapeRenderer.rect(1540, 1845, 620, 120); }
+        if (dates.get(day) != "Wednesday") {
+            shapeRenderer.rect(1540, 1845, 550, 120);
+        } else {
+            shapeRenderer.rect(1540, 1845, 620, 120);
+        }
         shapeRenderer.end();
 
         Batch batch = new SpriteBatch();
         String timerimage = "";
-        if (hourtimer < 16) {timerimage = "sun.png";}
-        else if (hourtimer < 20) {timerimage = "evening.png";}
-        else {timerimage = "moon.png";}
+        if (hourtimer < 16) {
+            timerimage = "sun.png";
+        } else if (hourtimer < 20) {
+            timerimage = "evening.png";
+        } else {
+            timerimage = "moon.png";
+        }
         texture = new Texture(Gdx.files.internal(timerimage));
         batch.begin();
         batch.draw(texture, 1555, 1855, 100, 100);
@@ -159,14 +157,14 @@ public class Group13Game extends ApplicationAdapter {
 
     }
 
-    private void startDay(){
+    private void startDay() {
         hourtimer = 9;
         timer = 0;
         day++;
-        theStudent.setPosition(690,1550);
+        theStudent.setPosition(690, 1550);
     }
 
-    private void HandleDayChange(){
+    private void HandleDayChange() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK); // Yellow color
         shapeRenderer.rect(screenwipex, 0, 4000, 2000);
@@ -180,8 +178,11 @@ public class Group13Game extends ApplicationAdapter {
 
         Batch batch = new SpriteBatch();
         String timerimage = "";
-        if (hourtimer > 9) {timerimage = "moon.png";}
-        else {timerimage = "sun.png";}
+        if (hourtimer > 9) {
+            timerimage = "moon.png";
+        } else {
+            timerimage = "sun.png";
+        }
         texture = new Texture(Gdx.files.internal(timerimage));
         batch.begin();
         batch.draw(texture, screenwipex + 1650, screenwipey + 800, 600, 600);
@@ -189,24 +190,41 @@ public class Group13Game extends ApplicationAdapter {
         batch.end();
 
         //funky animation stuff
-        if (screenwipex > 0){screenwipex -= 200;}
-        else{transitiontimer += Gdx.graphics.getDeltaTime();}
-        if (transitiontimer >= 1 && (screenwipey <= 0 || screenwipey > 200)){screenwipey -= 100;}
-        if (screenwipey < -1000){screenwipey = 2000; startDay();}
-        if (transitiontimer >= 3){screenwipex -= 200;}
-        if (screenwipex <= -4000){daytransition = false; theStudent.startmovement(); freezetimer = false;}
+        if (screenwipex > 0) {
+            screenwipex -= 200;
+        } else {
+            transitiontimer += Gdx.graphics.getDeltaTime();
+        }
+        if (transitiontimer >= 1 && (screenwipey <= 0 || screenwipey > 200)) {
+            screenwipey -= 100;
+        }
+        if (screenwipey < -1000) {
+            screenwipey = 2000;
+            startDay();
+        }
+        if (transitiontimer >= 3) {
+            screenwipex -= 200;
+        }
+        if (screenwipex <= -4000) {
+            daytransition = false;
+            theStudent.startmovement();
+            freezetimer = false;
+        }
     }
 
-    private void HandleTimer(){
-        if (!freezetimer){
+    private void HandleTimer() {
+        if (!freezetimer) {
             timer += Gdx.graphics.getDeltaTime() / 2;
         }
-        if (timer > 60){
+        if (timer > 60) {
             timer = timer - 60;
             hourtimer++;
         }
-        if (timer < 10){ displaytimer = Integer.toString(hourtimer) + ":0" + String.valueOf((int) timer);}
-        else {displaytimer = Integer.toString(hourtimer) + ":" + String.valueOf((int) timer);}
+        if (timer < 10) {
+            displaytimer = Integer.toString(hourtimer) + ":0" + String.valueOf((int) timer);
+        } else {
+            displaytimer = Integer.toString(hourtimer) + ":" + String.valueOf((int) timer);
+        }
 
         //draw timer
         BitmapFont font = new BitmapFont();
@@ -217,11 +235,11 @@ public class Group13Game extends ApplicationAdapter {
         font.draw(batch, dates.get(day) + " " + displaytimer, 1675, 1930);
         batch.end();
 
-        if (hourtimer > 23 && !freezetimer){
+        if (hourtimer > 23 && !freezetimer) {
             //past midnight!
             freezetimer = true;
             theStudent.lockmovement();
-            settext(new ArrayList<>(Arrays.asList("It's too late at night!","You fell asleep!")));
+            settext(new ArrayList<>(Arrays.asList("It's too late at night!", "You fell asleep!")));
             drawtextbox();
         }
     }
@@ -257,31 +275,32 @@ public class Group13Game extends ApplicationAdapter {
         shapeRenderer.dispose();
     }
 
-    public static void drawtextbox(){
+    public static void drawtextbox() {
         showTextbox = true;
         freezetimer = true;
     }
 
-    public static void hidetextbox(){
+    public static void hidetextbox() {
         showTextbox = false;
         freezetimer = false;
     }
 
-    public static void settext(ArrayList<String> text){
+    public static void settext(ArrayList<String> text) {
         currenttext = 0;
         textboxText = text;
     }
 
-    public static void addTime(int hours, float minutes){
+    public static void addTime(int hours, float minutes) {
         hourtimer += hours;
         timer += minutes;
     }
 
-    public static int getTime(){
+    public static int getTime() {
         return hourtimer;
     }
 
-    public static void endDay(){
+    public static void endDay(Player student) {
+        student.UpdateScorePercentages();
         daytransition = true;
         screenwipex = 4500;
         screenwipey = 0;
