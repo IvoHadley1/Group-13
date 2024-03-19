@@ -51,45 +51,57 @@ public class Group13Game extends Game {
 
     @Override
     public void create() {
-        this.setScreen(new MainMenuScreen(this));
-
+        // Initialize game-related objects and variables
         textboxText.add("test");
-
         shapeRenderer = new ShapeRenderer();
-        theStudent = new Player(100, 100);
-        // added for debug theGym = new Gym(50, 50);
-        // can change values as needed
-        //location and size are for defining interaction distance (i.e. where does the player need to be to interact)
-        theGym = new Gym(3570, 1130, 30, 150, "Gym");
-        theStudent.addcollision(theGym);
-
-        theLibrary = new Library(400, 100, 450, 600, "CS Building");
-        theStudent.addcollision(theLibrary);
-
-        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
-        theStudent.addcollision(studentRoom);
-
-        Piazza = new Food(2150, 250, 150, 600, "The Piazza");
-        theStudent.addcollision(Piazza);
-
-        day = -1;
-
-
         camera = new OrthographicCamera(1200, 600);
         camera.position.set(600, 300, 0);
         camera.update();
+        day = -1;
+        mapRenderer = setupMap();
 
 
+        // Set the initial screen to MainMenuScreen
+        setScreen(new MainMenuScreen(this));
     }
 
-    public void setupGame() {
-        mapRenderer = setupMap();
+    public void startGame() {
+        // Initialize game objects and start the game
+        theStudent = new Player(100, 100);
+        theGym = new Gym(3570, 1130, 30, 150, "Gym");
+        theStudent.addcollision(theGym);
+        theLibrary = new Library(400, 100, 450, 600, "CS Building");
+        theStudent.addcollision(theLibrary);
+        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
+        theStudent.addcollision(studentRoom);
+        Piazza = new Food(2150, 250, 150, 600, "The Piazza");
+        theStudent.addcollision(Piazza);
         startDay();
     }
 
+    //    public void setupGame() {
+    //        theStudent = new Player(100, 100);
+    //        theGym = new Gym(3570, 1130, 30, 150, "Gym");
+    //        theStudent.addcollision(theGym);
+    //        theLibrary = new Library(400, 100, 450, 600, "CS Building");
+    //        theStudent.addcollision(theLibrary);
+    //        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
+    //        theStudent.addcollision(studentRoom);
+    //        Piazza = new Food(2150, 250, 150, 600, "The Piazza");
+    //        theStudent.addcollision(Piazza);
+    //        mapRenderer = setupMap();
+    //        startDay();
+    //    }
+
     public OrthogonalTiledMapRenderer setupMap() {
-        map = new TmxMapLoader().load("Map1.tmx");
-        return new OrthogonalTiledMapRenderer(map, 1);
+        try {
+            map = new TmxMapLoader().load("Map1.tmx");
+            Gdx.app.log("MapLoader", "Map loaded successfully");
+            return new OrthogonalTiledMapRenderer(map, 1);
+        } catch (Exception e) {
+            Gdx.app.error("MapLoader", "Error loading map", e);
+            return null;
+        }
     }
 
     @Override
@@ -100,13 +112,20 @@ public class Group13Game extends Game {
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-            theGym.draw(shapeRenderer); //collision renderers
+            theGym.draw(shapeRenderer);
             theLibrary.draw(shapeRenderer);
             studentRoom.draw(shapeRenderer);
             Piazza.draw(shapeRenderer);
 
-            mapRenderer.setView(camera);
-            mapRenderer.render();
+
+            //genuinely no idea about what the error might be here ngl, it prints map rendered successfully but the map is purely white.
+            if (mapRenderer != null) {
+                mapRenderer.setView(camera);
+                mapRenderer.render();
+                //Gdx.app.log("MapRenderer", "Map rendered successfully");
+            } else {
+                //(Gdx.app.log("MapRenderer", "Map renderer is null");
+            }
 
             HandlePlayerActions();
 
@@ -167,6 +186,8 @@ public class Group13Game extends Game {
             }
         }
 
+        //Bruh, even in game screen I can somehow click on tutorial or play buttons???
+        //System.out.println(getScreen());
         super.render();
 
     }

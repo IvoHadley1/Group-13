@@ -1,9 +1,7 @@
 package com.group13.game;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 
 public class GameScreen implements Screen {
     private Group13Game gameLogic; // Assuming Group13Game holds the game logic
@@ -12,18 +10,15 @@ public class GameScreen implements Screen {
         // Assuming Group13Game can be initialized without arguments
         // Or modify it to take arguments if necessary
         gameLogic = new Group13Game();
-        gameLogic.create(); // Call any initialization methods needed for your game
     }
 
     @Override
     public void show() {
-        gameLogic.setupGame();
+        gameLogic.startGame();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(1, 1, 1, 1); // White background
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameLogic.render(); // Delegate to the game logic render method
     }
