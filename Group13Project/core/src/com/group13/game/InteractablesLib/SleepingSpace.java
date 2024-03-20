@@ -49,7 +49,7 @@ public abstract class SleepingSpace extends InteractableSpaces {
         minSleepScore = Math.max(minSleepScore, 0);
 
         // Generate a random sleep score
-        float randomSleepScore = minSleepScore + (random.nextFloat() * (this.sleepScore - minSleepScore + 1));
+        float randomSleepScore = (float) (minSleepScore + (Math.random() * (this.sleepScore - minSleepScore + 1)));
 
         // Add the calculated random sleep score to the player
         player.addMotivationScore(randomSleepScore);
