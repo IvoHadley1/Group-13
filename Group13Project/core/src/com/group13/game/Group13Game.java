@@ -17,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 
 public class Group13Game extends Game {
@@ -50,6 +51,10 @@ public class Group13Game extends Game {
     private OrthogonalTiledMapRenderer mapRenderer;
     OrthographicCamera camera;
 
+    private static float popupTimer = 0;
+    private static boolean isPopupShown = false;
+
+
     @Override
     public void create() {
         screenwipex = 0;
@@ -71,7 +76,7 @@ public class Group13Game extends Game {
         setScreen(new MainMenuScreen(this));
     }
 
-    public static TiledMap getmap(){
+    public static TiledMap getmap() {
         return map;
     }
 
@@ -102,6 +107,7 @@ public class Group13Game extends Game {
 
     @Override
     public void render() {
+        super.render();
         if (getScreen() instanceof GameScreen) {
 
             camera.update();
@@ -124,6 +130,16 @@ public class Group13Game extends Game {
 
             HandlePlayerActions();
 
+            // Logic to automatically hide the popup after 1 second
+            if (isPopupShown) {
+                popupTimer += Gdx.graphics.getDeltaTime();
+                if (popupTimer >= 1) { // 1 second has elapsed
+                    hidetextbox(theStudent); // Call your method to hide the popup
+                    isPopupShown = false;
+                    popupTimer = 0; // Reset the timer
+                }
+            }
+
             if (showTextbox) {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeRenderer.setColor(Color.WHITE);
@@ -131,7 +147,7 @@ public class Group13Game extends Game {
                 shapeRenderer.end();
 
                 BitmapFont font = new BitmapFont();
-                font.getData().setScale(screenwidth / 400);
+                font.getData().setScale((float) screenwidth / 400);
                 font.setColor(Color.BLACK);
                 Batch batch = new SpriteBatch();
                 batch.begin();
@@ -141,8 +157,8 @@ public class Group13Game extends Game {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                     currenttext++;
                     if (currenttext >= textboxText.size()) {
-                        hidetextbox();
-                        if (textboxText.get(1) == "You went to sleep until 9am." || textboxText.get(1) == "You fell asleep!") {
+                        hidetextbox(theStudent);
+                        if (Objects.equals(textboxText.get(1), "You went to sleep until 9am.") || Objects.equals(textboxText.get(1), "You fell asleep!")) {
                             endDay(theStudent);
                         } else {
                             theStudent.startmovement();
@@ -153,7 +169,7 @@ public class Group13Game extends Game {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE); // Yellow color
-            if (dates.get(day) != "Wednesday") {
+            if (!Objects.equals(dates.get(day), "Wednesday")) {
                 shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.6), (float) screenheight / 12);
             } else {
                 shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.1), (float) screenheight / 12);
@@ -196,12 +212,12 @@ public class Group13Game extends Game {
     private void HandleDayChange() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK); // Yellow color
-        shapeRenderer.rect(screenwipex, 0, (float) (screenwidth * 1.5), (float)(screenheight * 1.5));
+        shapeRenderer.rect(screenwipex, 0, (float) (screenwidth * 1.5), (float) (screenheight * 1.5));
         shapeRenderer.end();
         freezetimer = true;
         showTextbox = false;
 
-        if (dates.get(day) != "End"){
+        if (!Objects.equals(dates.get(day), "End")) {
             BitmapFont font = new BitmapFont();
             font.getData().setScale(8);
             font.setColor(Color.WHITE);
@@ -216,7 +232,7 @@ public class Group13Game extends Game {
             texture = new Texture(Gdx.files.internal(timerimage));
             batch.begin();
             batch.draw(texture, (float) (screenwipex + (screenwidth / 2.5)), (float) (screenwipey + (screenheight / 5)), (float) (screenwidth / 3.5), (float) (screenheight / 2.3));
-            font.draw(batch, dates.get(day), screenwipex + (screenwidth / 2) - (dates.get(day).length() * 15), screenwipey + (screenheight / 6));
+            font.draw(batch, dates.get(day), screenwipex + ((float) screenwidth / 2) - (dates.get(day).length() * 15), screenwipey + ((float) screenheight / 6));
             batch.end();
         }
 
@@ -233,7 +249,7 @@ public class Group13Game extends Game {
             screenwipey = 2000;
             startDay();
         }
-        if (dates.get(day) != "End") {
+        if (!Objects.equals(dates.get(day), "End")) {
             if (transitiontimer >= 3) {
                 screenwipex -= 200;
             }
@@ -242,28 +258,27 @@ public class Group13Game extends Game {
                 theStudent.startmovement();
                 freezetimer = false;
             }
-        }
-        else{
+        } else {
             //final day
             theStudent.calculateFinalScore();
             float[] scores = theStudent.getscores();
 
             BitmapFont font = new BitmapFont();
-            font.getData().setScale(screenwidth / 350);
+            font.getData().setScale((float) screenwidth / 350);
             font.setColor(Color.BLACK);
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE); // Yellow color
-            shapeRenderer.rect((float) (screenwidth/3.5), (float) (screenwipey), (float) (screenwidth / 2.5), (float) (screenheight / 2));
+            shapeRenderer.rect((float) (screenwidth / 3.5), (float) (screenwipey), (float) (screenwidth / 2.5), (float) (screenheight / 2));
             shapeRenderer.end();
 
             Batch batch = new SpriteBatch();
             batch.begin();
-            font.draw(batch, "Times Studied: " + scores[0], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 2.2));
-            font.draw(batch, "Times Slept: " + scores[1], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 2.7));
-            font.draw(batch, "Times Relaxed: " + scores[2], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 3.5));
-            font.draw(batch, "Times Eaten " + scores[3], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 5));
-            font.draw(batch, "Final Score " + scores[4], (float) (screenwidth/3.15), screenwipey + (float) (screenheight / 9));
+            font.draw(batch, "Times Studied: " + scores[0], (float) (screenwidth / 3.2), screenwipey + (float) (screenheight / 2.2));
+            font.draw(batch, "Times Slept: " + scores[1], (float) (screenwidth / 3.2), screenwipey + (float) (screenheight / 2.7));
+            font.draw(batch, "Times Relaxed: " + scores[2], (float) (screenwidth / 3.2), screenwipey + (float) (screenheight / 3.5));
+            font.draw(batch, "Times Eaten " + scores[3], (float) (screenwidth / 3.2), screenwipey + (float) (screenheight / 5));
+            font.draw(batch, "Final Score " + scores[4], (float) (screenwidth / 3.15), screenwipey + (float) (screenheight / 9));
             batch.end();
         }
     }
@@ -278,8 +293,7 @@ public class Group13Game extends Game {
         }
         if (timer < 10) {
             displaytimer = Integer.toString(hourtimer) + ":0" + String.valueOf((int) timer);
-        }
-        else {
+        } else {
             displaytimer = Integer.toString(hourtimer) + ":" + String.valueOf((int) timer);
         }
 
@@ -289,7 +303,7 @@ public class Group13Game extends Game {
         Batch batch = new SpriteBatch();
         batch.begin();
         font.setColor(Color.BLACK);
-        font.draw(batch, dates.get(day) + " " + displaytimer, (float)(screenwidth/2.32), (float) (screenheight / 1.05));
+        font.draw(batch, dates.get(day) + " " + displaytimer, (float) (screenwidth / 2.32), (float) (screenheight / 1.05));
         batch.end();
 
         if (hourtimer > 23 && !freezetimer) {
@@ -335,11 +349,14 @@ public class Group13Game extends Game {
     public static void drawtextbox() {
         showTextbox = true;
         freezetimer = true;
+        isPopupShown = true;
+        popupTimer = 0; // Reset timer whenever the textbox is shown
     }
 
-    public static void hidetextbox() {
+    public static void hidetextbox(Player player) {
         showTextbox = false;
         freezetimer = false;
+        player.startmovement();
     }
 
     public static void settext(ArrayList<String> text) {
