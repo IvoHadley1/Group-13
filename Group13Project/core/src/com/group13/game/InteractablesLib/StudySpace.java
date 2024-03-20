@@ -37,7 +37,7 @@ public abstract class StudySpace extends InteractableSpaces {
         minStudyScore = Math.max(minStudyScore, 0);
 
         // Generate a random study score
-        float randomStudyScore = minStudyScore + random.nextFloat((this.studyScore - minStudyScore + 1));
+        float randomStudyScore = minStudyScore + (random.nextFloat() * (this.studyScore - minStudyScore + 1));
 
         // Add the calculated random study score to the player
         player.addMotivationScore(randomStudyScore);
