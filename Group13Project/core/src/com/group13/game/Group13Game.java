@@ -308,7 +308,7 @@ public class Group13Game extends Game {
     }
 
     private void HandlePlayerActions() {
-        theStudent.draw(shapeRenderer);
+        theStudent.draw();
         theStudent.update(Gdx.graphics.getDeltaTime());
         handleInput();
     }
