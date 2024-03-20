@@ -42,9 +42,9 @@ public class Player {
     private float motivationScorePercentage;
     private float eatingScorePercentage;
 
-    private final int radius = 15;
+    private final int radius;
 
-    private final int actiondistance = 100;
+    private final int actiondistance;
     private boolean canmove = true;
 
     private List<InteractableSpaces> collisions = new ArrayList<InteractableSpaces>();
@@ -56,11 +56,12 @@ public class Player {
     float stateTime;
 
     public Player(float x, float y) {
+        radius = Gdx.graphics.getWidth() / 40;
         position = new Vector2(x, y);
         this.currentEnergy = this.maxEnergy;
         this.currentMotivation = 100;
         this.playerMovement = new Vector2(0, 0);
-        this.playerSpeed = 350f;
+        this.playerSpeed = (float) Gdx.graphics.getWidth() / 6;
 
         this.studyScore = 0;
         this.motivationScore = 0;
@@ -77,6 +78,8 @@ public class Player {
         this.sleepingScorePercentage = 0;
         this.motivationScorePercentage = 0;
         this.eatingScorePercentage = 0;
+
+        actiondistance = Gdx.graphics.getWidth() / 40;
 
         walkSheet = new Texture(Gdx.files.internal("playeranim.png"));
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FrameCols, walkSheet.getHeight() / FrameRows);
@@ -192,13 +195,13 @@ public class Player {
         SpriteBatch batch = new SpriteBatch();
         batch.begin();
         if (playerMovement.len() == 0){
-            batch.draw(stillFrame, position.x, position.y, 100, 100);
+            batch.draw(stillFrame, position.x, position.y, (float) Gdx.graphics.getWidth() / 25, (float) Gdx.graphics.getHeight() / 17);
         }
         else{
             if (Gdx.input.isKeyPressed(Input.Keys.A)){
                 currentFrame.flip(true, false);
             }
-            batch.draw(currentFrame, position.x, position.y, 100, 100);
+            batch.draw(currentFrame, position.x, position.y, (float) Gdx.graphics.getWidth() / 25, (float) Gdx.graphics.getHeight() / 17);
             if (Gdx.input.isKeyPressed(Input.Keys.A)){ //needed to flip it back afterwards
                 currentFrame.flip(true, false);
             }
@@ -233,9 +236,12 @@ public class Player {
             //detect if close enough to interact
 
             for (int i = 0; i < collisions.size(); i++) {
-                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth() + actiondistance)
-                        && (position.x - radius > collisions.get(i).getPosition().x - actiondistance)
-                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight() + actiondistance)
+
+
+
+                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth())
+                        && (position.x + radius > collisions.get(i).getPosition().x - actiondistance)
+                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight())
                         && (position.y + radius > collisions.get(i).getPosition().y - actiondistance)) {
                     collisions.get(i).interact(this);
                 }

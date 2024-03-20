@@ -22,7 +22,8 @@ import java.util.Arrays;
 public class Group13Game extends Game {
 
     private ShapeRenderer shapeRenderer;
-
+    int screenwidth;
+    int screenheight;
     Player theStudent;
     Gym theGym;
     Library theLibrary;
@@ -39,8 +40,8 @@ public class Group13Game extends Game {
     private String displaytimer;
     private static boolean freezetimer = false;
     private static boolean daytransition = false;
-    private static int screenwipex = 0;
-    private static int screenwipey = 0;
+    private static int screenwipex;
+    private static int screenwipey;
     private static float transitiontimer = 0;
     private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "End"));
     private int day;
@@ -51,6 +52,11 @@ public class Group13Game extends Game {
 
     @Override
     public void create() {
+        screenwipex = 0;
+        screenwipey = 0;
+        screenwidth = Gdx.graphics.getWidth();
+        screenheight = Gdx.graphics.getHeight();
+
         // Initialize game-related objects and variables
         textboxText.add("test");
         shapeRenderer = new ShapeRenderer();
@@ -67,14 +73,14 @@ public class Group13Game extends Game {
 
     public void startGame() {
         // Initialize game objects and start the game
-        theStudent = new Player(100, 100);
-        theGym = new Gym(3570, 1130, 30, 150, "Gym");
+        theStudent = new Player(10, 10);
+        theGym = new Gym((float) (screenwidth - 10), (float) (screenheight / 1.8), (float) screenwidth / 20, (float) screenheight / 10, "Gym");
         theStudent.addcollision(theGym);
-        theLibrary = new Library(400, 100, 450, 600, "CS Building");
+        theLibrary = new Library((float) (screenwidth / 9), (float) (screenheight / 13), (float) (screenwidth / 7), (float) (screenheight / 3.5), "CS Building");
         theStudent.addcollision(theLibrary);
-        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
+        studentRoom = new Bed((float) (screenwidth / 6), (float) (screenheight / 1.25), (float) screenwidth / 7, (float) screenheight / 7, "Dorm Room");
         theStudent.addcollision(studentRoom);
-        Piazza = new Food(2150, 250, 150, 600, "The Piazza");
+        Piazza = new Food((float) (screenwidth / 1.7), (float) screenheight / 8, (float) screenwidth / 14, (float) screenheight / 3, "The Piazza");
         theStudent.addcollision(Piazza);
         startDay();
     }
@@ -117,7 +123,6 @@ public class Group13Game extends Game {
             studentRoom.draw(shapeRenderer);
             Piazza.draw(shapeRenderer);
 
-
             //genuinely no idea about what the error might be here ngl, it prints map rendered successfully but the map is purely white.
             if (mapRenderer != null) {
                 mapRenderer.setView(camera);
@@ -131,16 +136,16 @@ public class Group13Game extends Game {
 
             if (showTextbox) {
                 shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-                shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
-                shapeRenderer.rect(820, 100, 2000, 300);
+                shapeRenderer.setColor(Color.WHITE);
+                shapeRenderer.rect((float) (screenwidth / 9), (float) (screenheight / 9), (float) (screenwidth / 1.3), (float) screenheight / 5);
                 shapeRenderer.end();
 
                 BitmapFont font = new BitmapFont();
-                font.getData().setScale(7);
+                font.getData().setScale(screenwidth / 350);
                 font.setColor(Color.BLACK);
                 Batch batch = new SpriteBatch();
                 batch.begin();
-                font.draw(batch, textboxText.get(currenttext), 850, 380);
+                font.draw(batch, textboxText.get(currenttext), (float) (screenwidth / 8.5), (float) (screenheight / 3.5));
                 batch.end();
 
                 if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
@@ -159,9 +164,9 @@ public class Group13Game extends Game {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE); // Yellow color
             if (dates.get(day) != "Wednesday") {
-                shapeRenderer.rect(1540, 1845, 550, 120);
+                shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.8), (float) screenheight / 12);
             } else {
-                shapeRenderer.rect(1540, 1845, 620, 120);
+                shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.1), (float) screenheight / 12);
             }
             shapeRenderer.end();
 
@@ -176,7 +181,7 @@ public class Group13Game extends Game {
             }
             texture = new Texture(Gdx.files.internal(timerimage));
             batch.begin();
-            batch.draw(texture, 1555, 1855, 100, 100);
+            batch.draw(texture, (float) (screenwidth / 2.6), (float) (screenheight / 1.11), (float) (screenwidth / 25), (float) (screenheight / 16));
             batch.end();
 
             HandleTimer();
@@ -186,7 +191,6 @@ public class Group13Game extends Game {
             }
         }
 
-        //Bruh, even in game screen I can somehow click on tutorial or play buttons???
         //System.out.println(getScreen());
         super.render();
 
@@ -196,13 +200,13 @@ public class Group13Game extends Game {
         hourtimer = 9;
         timer = 0;
         day++;
-        theStudent.setPosition(690, 1550);
+        theStudent.setPosition((int) (screenwidth / 6.5), (int) (screenheight / 1.45));
     }
 
     private void HandleDayChange() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.BLACK); // Yellow color
-        shapeRenderer.rect(screenwipex, 0, 4000, 2000);
+        shapeRenderer.rect(screenwipex, 0, (float) (screenwidth * 1.5), (float)(screenheight * 1.5));
         shapeRenderer.end();
         freezetimer = true;
         showTextbox = false;
@@ -221,8 +225,8 @@ public class Group13Game extends Game {
             }
             texture = new Texture(Gdx.files.internal(timerimage));
             batch.begin();
-            batch.draw(texture, screenwipex + 1650, screenwipey + 800, 600, 600);
-            font.draw(batch, dates.get(day), screenwipex + 1800 - (dates.get(day).length() * 15), screenwipey + 600);
+            batch.draw(texture, (float) (screenwipex + (screenwidth / 2.5)), (float) (screenwipey + (screenheight / 5)), (float) (screenwidth / 3.5), (float) (screenheight / 2.3));
+            font.draw(batch, dates.get(day), screenwipex + (screenwidth / 2) - (dates.get(day).length() * 15), screenwipey + (screenheight / 6));
             batch.end();
         }
 
@@ -255,7 +259,7 @@ public class Group13Game extends Game {
             float[] scores = theStudent.getscores();
 
             BitmapFont font = new BitmapFont();
-            font.getData().setScale(7);
+            font.getData().setScale(screenwidth / 350);
             font.setColor(Color.BLACK);
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -291,11 +295,11 @@ public class Group13Game extends Game {
 
         //draw timer
         BitmapFont font = new BitmapFont();
-        font.getData().setScale(4);
+        font.getData().setScale((float) screenwidth / 450);
         Batch batch = new SpriteBatch();
         batch.begin();
         font.setColor(Color.BLACK);
-        font.draw(batch, dates.get(day) + " " + displaytimer, 1675, 1930);
+        font.draw(batch, dates.get(day) + " " + displaytimer, (float)(screenwidth/2.32), (float) (screenheight / 1.05));
         batch.end();
 
         if (hourtimer > 23 && !freezetimer) {
@@ -365,7 +369,7 @@ public class Group13Game extends Game {
     public static void endDay(Player student) {
         student.UpdateScorePercentages();
         daytransition = true;
-        screenwipex = 4500;
+        screenwipex = (int) (Gdx.graphics.getWidth() * 1.5);
         screenwipey = 0;
         transitiontimer = 0;
     }
