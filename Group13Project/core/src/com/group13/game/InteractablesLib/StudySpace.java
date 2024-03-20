@@ -18,8 +18,7 @@ public abstract class StudySpace extends InteractableSpaces {
     public void applyInteractions(Player player) {
         ArrayList<String> text = new ArrayList<String>();
         text.add("");
-        text.add("Library");
-        text.add("test");
+        text.add("You studied in the CS building for a \nfew hours!");
         Group13Game.addTime(3,0);
         Group13Game.settext(text);
         GiveStudyScore(player);

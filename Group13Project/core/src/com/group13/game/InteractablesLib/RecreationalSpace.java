@@ -19,8 +19,7 @@ public abstract class RecreationalSpace extends InteractableSpaces {
     public void applyInteractions(Player player) {
         ArrayList<String> text = new ArrayList<String>();
         text.add("");
-        text.add("Gym");
-        text.add("Test");
+        text.add("You went to the gym!");
         Group13Game.addTime(2, 0);
         Group13Game.settext(text);
         GiveMotivation(player);

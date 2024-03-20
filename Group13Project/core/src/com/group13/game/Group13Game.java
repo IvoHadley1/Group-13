@@ -42,7 +42,7 @@ public class Group13Game extends Game {
     private static int screenwipex = 0;
     private static int screenwipey = 0;
     private static float transitiontimer = 0;
-    private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"));
+    private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "End"));
     private int day;
 
     private TiledMap map;
@@ -207,22 +207,24 @@ public class Group13Game extends Game {
         freezetimer = true;
         showTextbox = false;
 
-        BitmapFont font = new BitmapFont();
-        font.getData().setScale(8);
-        font.setColor(Color.WHITE);
+        if (dates.get(day) != "End"){
+            BitmapFont font = new BitmapFont();
+            font.getData().setScale(8);
+            font.setColor(Color.WHITE);
 
-        Batch batch = new SpriteBatch();
-        String timerimage = "";
-        if (hourtimer > 9) {
-            timerimage = "moon.png";
-        } else {
-            timerimage = "sun.png";
+            Batch batch = new SpriteBatch();
+            String timerimage = "";
+            if (hourtimer > 9) {
+                timerimage = "moon.png";
+            } else {
+                timerimage = "sun.png";
+            }
+            texture = new Texture(Gdx.files.internal(timerimage));
+            batch.begin();
+            batch.draw(texture, screenwipex + 1650, screenwipey + 800, 600, 600);
+            font.draw(batch, dates.get(day), screenwipex + 1800 - (dates.get(day).length() * 15), screenwipey + 600);
+            batch.end();
         }
-        texture = new Texture(Gdx.files.internal(timerimage));
-        batch.begin();
-        batch.draw(texture, screenwipex + 1650, screenwipey + 800, 600, 600);
-        font.draw(batch, dates.get(day), screenwipex + 1800 - (dates.get(day).length() * 15), screenwipey + 600);
-        batch.end();
 
         //funky animation stuff
         if (screenwipex > 0) {
@@ -237,13 +239,38 @@ public class Group13Game extends Game {
             screenwipey = 2000;
             startDay();
         }
-        if (transitiontimer >= 3) {
-            screenwipex -= 200;
+        if (dates.get(day) != "End") {
+            if (transitiontimer >= 3) {
+                screenwipex -= 200;
+            }
+            if (screenwipex <= -4000) {
+                daytransition = false;
+                theStudent.startmovement();
+                freezetimer = false;
+            }
         }
-        if (screenwipex <= -4000) {
-            daytransition = false;
-            theStudent.startmovement();
-            freezetimer = false;
+        else{
+            //final day
+            theStudent.calculateFinalScore();
+            float[] scores = theStudent.getscores();
+
+            BitmapFont font = new BitmapFont();
+            font.getData().setScale(7);
+            font.setColor(Color.BLACK);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.WHITE); // Yellow color
+            shapeRenderer.rect(1200, screenwipey + 300, 1000, 1000);
+            shapeRenderer.end();
+
+            Batch batch = new SpriteBatch();
+            batch.begin();
+            font.draw(batch, "Times Studied: " + scores[0], 1250, screenwipey + 1150);
+            font.draw(batch, "Times Slept: " + scores[1], 1250, screenwipey + 1000);
+            font.draw(batch, "Times Relaxed: " + scores[2], 1250, screenwipey + 850);
+            font.draw(batch, "Times Eaten " + scores[3], 1250, screenwipey + 700);
+            font.draw(batch, "Final Score " + scores[4], 1250, screenwipey + 550);
+            batch.end();
         }
     }
 
@@ -257,7 +284,8 @@ public class Group13Game extends Game {
         }
         if (timer < 10) {
             displaytimer = Integer.toString(hourtimer) + ":0" + String.valueOf((int) timer);
-        } else {
+        }
+        else {
             displaytimer = Integer.toString(hourtimer) + ":" + String.valueOf((int) timer);
         }
 

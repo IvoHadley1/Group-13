@@ -223,4 +223,14 @@ public class Player {
     public void setPosition(int x, int y) {
         position = new Vector2(x, y);
     }
+
+    public float[] getscores(){
+        float[] scores = new float[5];
+        scores[0] = timesStudied;
+        scores[1] = timesSlept;
+        scores[2] = timesActivity;
+        scores[3] = timesEaten;
+        scores[4] = finalScore;
+        return scores;
+    }
 }
