@@ -43,7 +43,7 @@ public abstract class RecreationalSpace extends InteractableSpaces {
 
         // Generate a random motivation score between minMotivationScore (inclusive) and this.motivationScore (exclusive)
         // To include motivationScore as well, you add 1 to the upper bound.
-        float randomMotivationScore = minMotivationScore + random.nextFloat((this.motivationScore - minMotivationScore + 1));
+        float randomMotivationScore = minMotivationScore + (random.nextFloat() * (this.motivationScore - minMotivationScore + 1));
 
         // Add the calculated random motivation score to the player
         player.addMotivationScore(randomMotivationScore);

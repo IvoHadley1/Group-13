@@ -45,7 +45,7 @@ public abstract class FoodSpace extends InteractableSpaces {
         minEatingScore = Math.max(minEatingScore, 0);
 
         // Generate a random eating score
-        float randomEatingScore = minEatingScore + random.nextFloat((this.eatingScore - minEatingScore + 1));
+        float randomEatingScore = minEatingScore + random.nextFloat() * (this.eatingScore - minEatingScore + 1);
 
         // Add the calculated random eating score to the player
         player.addEatingScore(randomEatingScore);
