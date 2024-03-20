@@ -11,7 +11,7 @@ import com.group13.game.Group13Game;
 import com.group13.game.Player;
 
 public abstract class InteractableSpaces implements Interactable {
-    
+
     protected Vector2 position;
     protected float width;
     protected float height;
@@ -34,7 +34,7 @@ public abstract class InteractableSpaces implements Interactable {
         font.draw(batch, name, position.x + (width / 2) - (name.length() * 8), position.y + height + 90);
         batch.end();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.E) && Group13Game.hourtimer < 24) {
             player.lockmovement();
             applyInteractions(player); // Make sure to pass the player object
             Group13Game.drawtextbox();
@@ -44,13 +44,15 @@ public abstract class InteractableSpaces implements Interactable {
     // Define applyInteractions to take a Player parameter; implementation will be in subclasses
     public abstract void applyInteractions(Player player);
 
-    public Vector2 getPosition(){
+    public Vector2 getPosition() {
         return position;
     }
-    public float getWidth(){
+
+    public float getWidth() {
         return width;
     }
-    public float getHeight(){
+
+    public float getHeight() {
         return height;
     }
 }

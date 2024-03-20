@@ -37,7 +37,7 @@ public class Group13Game extends Game {
     private static int currenttext = 0;
 
     private static float timer;
-    private static int hourtimer;
+    public static int hourtimer;
     private String displaytimer;
     private static boolean freezetimer = false;
     private static boolean daytransition = false;
@@ -45,12 +45,13 @@ public class Group13Game extends Game {
     private static int screenwipey;
     private static float transitiontimer = 0;
     private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "End"));
-    private int day;
+    private static int day;
 
     private static TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
     OrthographicCamera camera;
 
+    private boolean shouldEndDay = false;
     private static float popupTimer = 0;
     private static boolean isPopupShown = false;
 
@@ -68,7 +69,7 @@ public class Group13Game extends Game {
         camera = new OrthographicCamera(1200, 600);
         camera.position.set(600, 300, 0);
         camera.update();
-        day = -1;
+        day = 0;
         mapRenderer = setupMap();
 
 
@@ -129,6 +130,11 @@ public class Group13Game extends Game {
             }
 
             HandlePlayerActions();
+
+            if (shouldEndDay) {
+                endDay(theStudent);
+                shouldEndDay = false;
+            }
 
             // Logic to automatically hide the popup after 1 second
             if (isPopupShown) {
@@ -205,7 +211,6 @@ public class Group13Game extends Game {
     private void startDay() {
         hourtimer = 9;
         timer = 0;
-        day++;
         theStudent.setPosition((int) (screenwidth / 6.5), (int) (screenheight / 1.45));
     }
 
@@ -248,6 +253,7 @@ public class Group13Game extends Game {
         if (screenwipey < -1000) {
             screenwipey = 2000;
             startDay();
+            day++;
         }
         if (!Objects.equals(dates.get(day), "End")) {
             if (transitiontimer >= 3) {
@@ -306,12 +312,13 @@ public class Group13Game extends Game {
         font.draw(batch, dates.get(day) + " " + displaytimer, (float) (screenwidth / 2.32), (float) (screenheight / 1.05));
         batch.end();
 
-        if (hourtimer > 23 && !freezetimer) {
+        if (hourtimer >= 23 && !freezetimer) {
             //past midnight!
             freezetimer = true;
             theStudent.lockmovement();
             settext(new ArrayList<>(Arrays.asList("It's too late at night!", "You fell asleep!")));
             drawtextbox();
+            endDay(theStudent); // Directly call endDay instead of setting shouldEndDay flag
         }
     }
 
@@ -379,5 +386,7 @@ public class Group13Game extends Game {
         screenwipex = (int) (Gdx.graphics.getWidth() * 1.5);
         screenwipey = 0;
         transitiontimer = 0;
+        hourtimer = 9; // Reset hourtimer to 9
+        timer = 0; // Reset timer to 0
     }
 }
