@@ -8,12 +8,19 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.group13.game.InteractablesLib.InteractableSpaces;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Player {
     private final float playerSpeed;
@@ -236,14 +243,26 @@ public class Player {
             //detect if close enough to interact
 
             for (int i = 0; i < collisions.size(); i++) {
-
-
-
                 if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth())
                         && (position.x + radius > collisions.get(i).getPosition().x - actiondistance)
                         && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight())
                         && (position.y + radius > collisions.get(i).getPosition().y - actiondistance)) {
                     collisions.get(i).interact(this);
+                }
+            }
+
+            int objectlayer = 3;
+            TiledMap map = Group13Game.getmap();
+            TiledMapTileLayer collisionobjects = (TiledMapTileLayer)map.getLayers().get(objectlayer);
+            MapObjects objects = collisionobjects.getObjects();
+
+            for (RectangleMapObject rectangleobject : objects.getByType(RectangleMapObject.class)){
+                Rectangle rectangle = rectangleobject.getRectangle();
+                if ((position.x - radius < rectangle.x + rectangle.getWidth())
+                        && (position.x + radius > rectangle.x)
+                        && (position.y - radius < rectangle.y + rectangle.getHeight())
+                        && (position.y + radius > rectangle.y)) {
+                    position.mulAdd(playerMovement, -playerSpeed * delta);
                 }
             }
         }

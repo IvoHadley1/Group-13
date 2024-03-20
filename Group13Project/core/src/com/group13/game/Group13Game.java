@@ -46,7 +46,7 @@ public class Group13Game extends Game {
     private ArrayList<String> dates = new ArrayList<String>(Arrays.asList("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "End"));
     private int day;
 
-    private TiledMap map;
+    private static TiledMap map;
     private OrthogonalTiledMapRenderer mapRenderer;
     OrthographicCamera camera;
 
@@ -71,6 +71,10 @@ public class Group13Game extends Game {
         setScreen(new MainMenuScreen(this));
     }
 
+    public static TiledMap getmap(){
+        return map;
+    }
+
     public void startGame() {
         // Initialize game objects and start the game
         theStudent = new Player(10, 10);
@@ -84,20 +88,6 @@ public class Group13Game extends Game {
         theStudent.addcollision(Piazza);
         startDay();
     }
-
-    //    public void setupGame() {
-    //        theStudent = new Player(100, 100);
-    //        theGym = new Gym(3570, 1130, 30, 150, "Gym");
-    //        theStudent.addcollision(theGym);
-    //        theLibrary = new Library(400, 100, 450, 600, "CS Building");
-    //        theStudent.addcollision(theLibrary);
-    //        studentRoom = new Bed(630, 1650, 500, 200, "Dorm Room");
-    //        theStudent.addcollision(studentRoom);
-    //        Piazza = new Food(2150, 250, 150, 600, "The Piazza");
-    //        theStudent.addcollision(Piazza);
-    //        mapRenderer = setupMap();
-    //        startDay();
-    //    }
 
     public OrthogonalTiledMapRenderer setupMap() {
         try {
@@ -141,7 +131,7 @@ public class Group13Game extends Game {
                 shapeRenderer.end();
 
                 BitmapFont font = new BitmapFont();
-                font.getData().setScale(screenwidth / 350);
+                font.getData().setScale(screenwidth / 400);
                 font.setColor(Color.BLACK);
                 Batch batch = new SpriteBatch();
                 batch.begin();
@@ -164,7 +154,7 @@ public class Group13Game extends Game {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE); // Yellow color
             if (dates.get(day) != "Wednesday") {
-                shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.8), (float) screenheight / 12);
+                shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.6), (float) screenheight / 12);
             } else {
                 shapeRenderer.rect((float) (screenwidth / 2.62), (float) (screenheight / 1.125), (float) (screenwidth / 3.1), (float) screenheight / 12);
             }
@@ -264,16 +254,16 @@ public class Group13Game extends Game {
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE); // Yellow color
-            shapeRenderer.rect(1200, screenwipey + 300, 1000, 1000);
+            shapeRenderer.rect((float) (screenwidth/3.5), (float) (screenwipey), (float) (screenwidth / 2.5), (float) (screenheight / 2));
             shapeRenderer.end();
 
             Batch batch = new SpriteBatch();
             batch.begin();
-            font.draw(batch, "Times Studied: " + scores[0], 1250, screenwipey + 1150);
-            font.draw(batch, "Times Slept: " + scores[1], 1250, screenwipey + 1000);
-            font.draw(batch, "Times Relaxed: " + scores[2], 1250, screenwipey + 850);
-            font.draw(batch, "Times Eaten " + scores[3], 1250, screenwipey + 700);
-            font.draw(batch, "Final Score " + scores[4], 1250, screenwipey + 550);
+            font.draw(batch, "Times Studied: " + scores[0], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 2.2));
+            font.draw(batch, "Times Slept: " + scores[1], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 2.7));
+            font.draw(batch, "Times Relaxed: " + scores[2], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 3.5));
+            font.draw(batch, "Times Eaten " + scores[3], (float) (screenwidth/3.2), screenwipey + (float) (screenheight / 5));
+            font.draw(batch, "Final Score " + scores[4], (float) (screenwidth/3.15), screenwipey + (float) (screenheight / 9));
             batch.end();
         }
     }
