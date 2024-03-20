@@ -4,23 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.group13.game.InteractablesLib.InteractableSpaces;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class Player {
     private final float playerSpeed;
@@ -201,15 +191,14 @@ public class Player {
         TextureRegion stillFrame = walkAnimation.getKeyFrame(0.25f);
         SpriteBatch batch = new SpriteBatch();
         batch.begin();
-        if (playerMovement.len() == 0){
+        if (playerMovement.len() == 0) {
             batch.draw(stillFrame, position.x, position.y, (float) Gdx.graphics.getWidth() / 25, (float) Gdx.graphics.getHeight() / 17);
-        }
-        else{
-            if (Gdx.input.isKeyPressed(Input.Keys.A)){
+        } else {
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 currentFrame.flip(true, false);
             }
             batch.draw(currentFrame, position.x, position.y, (float) Gdx.graphics.getWidth() / 25, (float) Gdx.graphics.getHeight() / 17);
-            if (Gdx.input.isKeyPressed(Input.Keys.A)){ //needed to flip it back afterwards
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) { //needed to flip it back afterwards
                 currentFrame.flip(true, false);
             }
         }
@@ -222,11 +211,37 @@ public class Player {
             playerMovement.nor();
         }
 
-        // Update the player's position based on the movement vector and speed
-        if (canmove) {
-            position.mulAdd(playerMovement, playerSpeed * delta);
+        // Calculate next position based on current movement
+        Vector2 nextPosition = new Vector2(position).mulAdd(playerMovement, playerSpeed * delta);
 
-            // Prevent movement off screen
+        // Adjust collision box to be 25% smaller than interaction area
+        float collisionRadius = radius * 0.75f;
+
+        boolean collisionDetected = false;
+        for (InteractableSpaces space : collisions) {
+            // Calculate a reduced collision area for the player
+            float reducedWidth = space.getWidth() * 0.75f;
+            float reducedHeight = space.getHeight() * 0.75f;
+            Vector2 reducedPosition = new Vector2(
+                    space.getPosition().x + space.getWidth() * 0.125f, // Adjust position to account for reduced size
+                    space.getPosition().y + space.getHeight() * 0.125f
+            );
+
+            // Check collision with the adjusted (reduced) areas
+            if (nextPosition.x - collisionRadius < reducedPosition.x + reducedWidth &&
+                    nextPosition.x + collisionRadius > reducedPosition.x &&
+                    nextPosition.y - collisionRadius < reducedPosition.y + reducedHeight &&
+                    nextPosition.y + collisionRadius > reducedPosition.y) {
+                collisionDetected = true;
+                break;
+            }
+        }
+
+        // Update the player's position based on the movement vector and speed
+        if (!collisionDetected && canmove) {
+            position = nextPosition;
+
+            // Prevent the player from moving off-screen
             if (position.x < radius) {
                 position.x = radius;
             }
@@ -239,33 +254,19 @@ public class Player {
             if (position.y > Gdx.graphics.getHeight() - radius) {
                 position.y = Gdx.graphics.getHeight() - radius;
             }
+        }
 
-            //detect if close enough to interact
+        //detect if close enough to interact
 
-            for (int i = 0; i < collisions.size(); i++) {
-                if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth())
-                        && (position.x + radius > collisions.get(i).getPosition().x - actiondistance)
-                        && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight())
-                        && (position.y + radius > collisions.get(i).getPosition().y - actiondistance)) {
-                    collisions.get(i).interact(this);
-                }
-            }
-
-            int objectlayer = 3;
-            TiledMap map = Group13Game.getmap();
-            TiledMapTileLayer collisionobjects = (TiledMapTileLayer)map.getLayers().get(objectlayer);
-            MapObjects objects = collisionobjects.getObjects();
-
-            for (RectangleMapObject rectangleobject : objects.getByType(RectangleMapObject.class)){
-                Rectangle rectangle = rectangleobject.getRectangle();
-                if ((position.x - radius < rectangle.x + rectangle.getWidth())
-                        && (position.x + radius > rectangle.x)
-                        && (position.y - radius < rectangle.y + rectangle.getHeight())
-                        && (position.y + radius > rectangle.y)) {
-                    position.mulAdd(playerMovement, -playerSpeed * delta);
-                }
+        for (InteractableSpaces collision : collisions) {
+            if ((position.x - radius < collision.getPosition().x + collision.getWidth())
+                    && (position.x + radius > collision.getPosition().x - actiondistance)
+                    && (position.y - radius < collision.getPosition().y + collision.getHeight())
+                    && (position.y + radius > collision.getPosition().y - actiondistance)) {
+                collision.interact(this);
             }
         }
+
     }
 
     public void addcollision(InteractableSpaces newcollision) {
@@ -288,7 +289,7 @@ public class Player {
         position = new Vector2(x, y);
     }
 
-    public float[] getscores(){
+    public float[] getscores() {
         float[] scores = new float[5];
         scores[0] = timesStudied;
         scores[1] = timesSlept;
