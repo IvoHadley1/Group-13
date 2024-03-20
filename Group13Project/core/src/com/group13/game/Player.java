@@ -3,11 +3,8 @@ package com.group13.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.group13.game.InteractablesLib.Interactable;
 import com.group13.game.InteractablesLib.InteractableSpaces;
 
-import java.beans.VetoableChangeListener;
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,7 +82,7 @@ public class Player {
     public void calculateFinalScore() {
         this.finalScore = (studyScorePercentage + sleepingScorePercentage + motivationScorePercentage + eatingScorePercentage) / 4;
     }
-    
+
     // Activity counters
 
     public void DidActivity() {
@@ -142,8 +139,17 @@ public class Player {
         this.motivationScore += points;
     }
 
-    public float getCurrentHunger() {return currentHunger;}
-    public void setCurrentHunger(float hunger) {currentHunger = hunger;}
+    public float getCurrentHunger() {
+        return currentHunger;
+    }
+
+    public void setCurrentHunger(float hunger) {
+        currentHunger = hunger;
+    }
+
+    public void addEatingScore(float points) {
+        this.eatingScore += points;
+    }
 
     public float getSleepScore() {
         return sleepScore;
@@ -168,7 +174,7 @@ public class Player {
         }
 
         // Update the player's position based on the movement vector and speed
-        if (canmove){
+        if (canmove) {
             position.mulAdd(playerMovement, playerSpeed * delta);
 
             // Prevent movement off screen
@@ -187,7 +193,7 @@ public class Player {
 
             //detect if close enough to interact
 
-            for (int i = 0; i< collisions.size(); i++) {
+            for (int i = 0; i < collisions.size(); i++) {
                 if ((position.x - radius < collisions.get(i).getPosition().x + collisions.get(i).getWidth() + actiondistance)
                         && (position.x - radius > collisions.get(i).getPosition().x - actiondistance)
                         && (position.y - radius < collisions.get(i).getPosition().y + collisions.get(i).getHeight() + actiondistance)
@@ -198,7 +204,7 @@ public class Player {
         }
     }
 
-    public void addcollision(InteractableSpaces newcollision){
+    public void addcollision(InteractableSpaces newcollision) {
         collisions.add(newcollision);
     }
 
@@ -206,13 +212,15 @@ public class Player {
         playerMovement.set(x, y);
     }
 
-    public void lockmovement(){
+    public void lockmovement() {
         canmove = false;
     }
 
-    public void startmovement() {canmove = true;}
+    public void startmovement() {
+        canmove = true;
+    }
 
-    public void setPosition(int x, int y){
-        position = new Vector2(x,y);
+    public void setPosition(int x, int y) {
+        position = new Vector2(x, y);
     }
 }
