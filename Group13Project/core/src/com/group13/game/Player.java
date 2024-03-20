@@ -1,9 +1,16 @@
 package com.group13.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.group13.game.InteractablesLib.InteractableSpaces;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +49,12 @@ public class Player {
 
     private List<InteractableSpaces> collisions = new ArrayList<InteractableSpaces>();
 
+    //Animation Stuff
+    private static final int FrameCols = 6, FrameRows = 1;
+    Texture walkSheet;
+    Animation<TextureRegion> walkAnimation;
+    float stateTime;
+
     public Player(float x, float y) {
         position = new Vector2(x, y);
         this.currentEnergy = this.maxEnergy;
@@ -64,6 +77,18 @@ public class Player {
         this.sleepingScorePercentage = 0;
         this.motivationScorePercentage = 0;
         this.eatingScorePercentage = 0;
+
+        walkSheet = new Texture(Gdx.files.internal("playeranim.png"));
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FrameCols, walkSheet.getHeight() / FrameRows);
+        TextureRegion[] walkFrames = new TextureRegion[FrameRows * FrameCols];
+        int index = 0;
+        for (int i = 0; i < FrameRows; i++) {
+            for (int j = 0; j < FrameCols; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        walkAnimation = new Animation<TextureRegion>(0.2f, walkFrames);
+        stateTime = 0f;
     }
 
     // Update Current Score Percentages
@@ -160,11 +185,25 @@ public class Player {
     }
 
     // This method will be called from your render method in the main game screen
-    public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(1, 1, 1, 1); // Yellow color
-        shapeRenderer.circle(position.x, position.y, radius);
-        shapeRenderer.end();
+    public void draw() {
+        stateTime += Gdx.graphics.getDeltaTime();
+        TextureRegion currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+        TextureRegion stillFrame = walkAnimation.getKeyFrame(0.25f);
+        SpriteBatch batch = new SpriteBatch();
+        batch.begin();
+        if (playerMovement.len() == 0){
+            batch.draw(stillFrame, position.x, position.y, 100, 100);
+        }
+        else{
+            if (Gdx.input.isKeyPressed(Input.Keys.A)){
+                currentFrame.flip(true, false);
+            }
+            batch.draw(currentFrame, position.x, position.y, 100, 100);
+            if (Gdx.input.isKeyPressed(Input.Keys.A)){ //needed to flip it back afterwards
+                currentFrame.flip(true, false);
+            }
+        }
+        batch.end();
     }
 
     public void update(float delta) {
@@ -222,5 +261,15 @@ public class Player {
 
     public void setPosition(int x, int y) {
         position = new Vector2(x, y);
+    }
+
+    public float[] getscores(){
+        float[] scores = new float[5];
+        scores[0] = timesStudied;
+        scores[1] = timesSlept;
+        scores[2] = timesActivity;
+        scores[3] = timesEaten;
+        scores[4] = finalScore;
+        return scores;
     }
 }

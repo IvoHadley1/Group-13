@@ -22,8 +22,7 @@ public abstract class FoodSpace extends InteractableSpaces {
     public void applyInteractions(Player player) {
         ArrayList<String> text = new ArrayList<String>();
         text.add("");
-        text.add("Piazza");
-        text.add("test");
+        text.add("You went to get food at the Piazza!");
         Group13Game.addTime(0, 30);
         Group13Game.settext(text);
         GiveHunger(player);
